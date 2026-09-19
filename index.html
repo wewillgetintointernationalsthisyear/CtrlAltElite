@@ -1,263 +1,450 @@
 <!doctype html>
-
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>CtrlAltElite | FLL BioGlow 2026</title>
 
-    ```
     <link rel="stylesheet" href="style.css" />
-    ```
   </head>
 
   <body>
-    ```
     <header class="topbar">
-      <div>
+      <div class="logo-area">
         <h1>CtrlAltElite</h1>
         <p>FLL BioGlow 2026</p>
       </div>
 
-      <div class="next-event">
-        <span>Next event</span>
-        <strong>FLL Club</strong>
-        <small>Wednesday</small>
+      <div class="team-status">
+        <span>Team Command Centre</span>
       </div>
     </header>
 
-    <main class="dashboard">
-      <!-- OVERVIEW -->
-      <section class="overview">
-        <div class="welcome">
-          <p class="eyebrow">TEAM COMMAND CENTRE</p>
-          <h2>Let's get this done.</h2>
-          <p>Everything your team needs for BioGlow in one place.</p>
+    <nav class="navigation">
+      <button class="nav-button active" data-section="dashboard">
+        Dashboard
+      </button>
+
+      <button class="nav-button" data-section="calendar">Calendar</button>
+
+      <button class="nav-button" data-section="tasks">Tasks</button>
+
+      <button class="nav-button" data-section="team">Team</button>
+    </nav>
+
+    <main>
+      <!-- DASHBOARD -->
+
+      <section id="dashboard" class="page-section active-section">
+        <div class="page-heading">
+          <p class="eyebrow">FLL BIOGLOW 2026</p>
+          <h2>Team Dashboard</h2>
+          <p>Keep track of everything your team needs to get done.</p>
         </div>
 
-        <div class="progress-card">
-          <div class="progress-heading">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span>Tasks</span>
+            <strong id="task-count">0</strong>
+          </div>
+
+          <div class="stat-card">
+            <span>Upcoming events</span>
+            <strong id="event-count">0</strong>
+          </div>
+
+          <div class="stat-card">
+            <span>Overdue</span>
+            <strong id="overdue-count">0</strong>
+          </div>
+
+          <div class="stat-card">
             <span>Overall progress</span>
-            <strong>0%</strong>
-          </div>
-
-          <div class="progress-bar">
-            <div class="progress-fill" style="width: 0%"></div>
+            <strong id="overall-progress">0%</strong>
           </div>
         </div>
-      </section>
 
-      <!-- CATEGORIES -->
-      <section>
-        <div class="section-heading">
-          <h2>Projects</h2>
-          <p>Track progress across each area.</p>
-        </div>
-
-        <div class="category-grid">
-          <div class="category innovations">
-            <span>🧬</span>
-            <h3>Innovations</h3>
-            <p>0% complete</p>
-            <div class="small-progress">
-              <div style="width: 0%"></div>
-            </div>
-          </div>
-
-          <div class="category robot-game">
-            <span>🏁</span>
-            <h3>Robot Game</h3>
-            <p>0% complete</p>
-            <div class="small-progress">
-              <div style="width: 0%"></div>
-            </div>
-          </div>
-
-          <div class="category robot-design">
-            <span>⚙️</span>
-            <h3>Robot Design</h3>
-            <p>0% complete</p>
-            <div class="small-progress">
-              <div style="width: 0%"></div>
-            </div>
-          </div>
-
-          <div class="category documentation">
-            <span>📄</span>
-            <h3>Documentation</h3>
-            <p>0% complete</p>
-            <div class="small-progress">
-              <div style="width: 0%"></div>
-            </div>
-          </div>
-
-          <div class="category presentation">
-            <span>🎤</span>
-            <h3>Presentation</h3>
-            <p>0% complete</p>
-            <div class="small-progress">
-              <div style="width: 0%"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- CURRENT TASKS -->
-      <section>
-        <div class="section-heading">
-          <h2>Working on now</h2>
-          <p>Tasks currently being worked on by the team.</p>
-        </div>
-
-        <div class="task-list">
-          <div class="task-card">
-            <div class="task-top">
+        <div class="dashboard-grid">
+          <div class="panel">
+            <div class="panel-heading">
               <div>
-                <span class="tag robot-design-tag">Robot Design</span>
-                <h3>Build the robot</h3>
+                <h3>Working on now</h3>
+                <p>Tasks currently in progress.</p>
               </div>
 
-              <span class="task-percentage">0%</span>
+              <button class="primary-button" id="add-task-dashboard">
+                + Add task
+              </button>
             </div>
 
-            <p class="task-note">
-              Find a reliable base model and begin testing attachments.
-            </p>
+            <div id="current-tasks" class="empty-state">
+              <h4>No active tasks</h4>
 
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 0%"></div>
-            </div>
-
-            <div class="task-meta">
-              <span>👤 Unassigned</span>
-              <span>📅 Due TBD</span>
-            </div>
-
-            <div class="subtasks">
-              <div class="subtask">
-                <span>○</span>
-                <span>Find a good base model</span>
-                <strong>0%</strong>
-              </div>
-
-              <div class="subtask">
-                <span>○</span>
-                <span>Test driving stability</span>
-                <strong>0%</strong>
-              </div>
-
-              <div class="subtask">
-                <span>○</span>
-                <span>Design attachment system</span>
-                <strong>0%</strong>
-              </div>
+              <p>Add a task when your team starts working on something.</p>
             </div>
           </div>
 
-          <div class="task-card">
-            <div class="task-top">
+          <div class="panel">
+            <div class="panel-heading">
               <div>
-                <span class="tag innovations-tag">Innovations</span>
-                <h3>Develop innovation idea</h3>
+                <h3>Next up</h3>
+                <p>Your upcoming events and deadlines.</p>
               </div>
 
-              <span class="task-percentage">0%</span>
+              <button class="primary-button" id="add-event-dashboard">
+                + Add event
+              </button>
             </div>
 
-            <p class="task-note">
-              Research the problem and develop possible solutions.
-            </p>
+            <div id="upcoming-events" class="empty-state">
+              <h4>No upcoming events</h4>
 
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 0%"></div>
+              <p>Add deadlines, meetings, competitions and other events.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROJECT PROGRESS -->
+
+        <div class="panel">
+          <div class="panel-heading">
+            <div>
+              <h3>Project progress</h3>
+              <p>How far along each FLL area is.</p>
+            </div>
+          </div>
+
+          <div class="category-progress">
+            <div class="category-progress-item">
+              <span>Innovations</span>
+
+              <strong id="progress-innovations"> Haven't started </strong>
             </div>
 
-            <div class="task-meta">
-              <span>👤 Unassigned</span>
-              <span>📅 Due TBD</span>
+            <div class="category-progress-item">
+              <span>Robot Game</span>
+
+              <strong id="progress-robot-game"> Haven't started </strong>
+            </div>
+
+            <div class="category-progress-item">
+              <span>Robot Design</span>
+
+              <strong id="progress-robot-design"> Haven't started </strong>
+            </div>
+
+            <div class="category-progress-item">
+              <span>Documentation</span>
+
+              <strong id="progress-documentation"> Haven't started </strong>
+            </div>
+
+            <div class="category-progress-item">
+              <span>Presentation</span>
+
+              <strong id="progress-presentation"> Haven't started </strong>
             </div>
           </div>
         </div>
       </section>
 
       <!-- CALENDAR -->
-      <section>
-        <div class="section-heading">
-          <h2>Upcoming</h2>
-          <p>Important events and deadlines.</p>
+
+      <section id="calendar" class="page-section">
+        <div class="page-heading">
+          <p class="eyebrow">SCHEDULE</p>
+
+          <h2>Calendar</h2>
+
+          <p>
+            Keep track of deadlines, meetings, club sessions and key events.
+          </p>
         </div>
 
-        <div class="event-list">
-          <div class="event">
-            <div class="date">
-              <strong>25</strong>
-              <span>SEP</span>
-            </div>
+        <div class="calendar-toolbar">
+          <button class="secondary-button" id="previous-month">←</button>
 
-            <div class="event-info">
-              <span class="tag robot-design-tag">Robot Design</span>
-              <h3>Base model research</h3>
-              <p>📍 School</p>
-            </div>
+          <h3 id="calendar-month">Month Year</h3>
 
-            <span class="event-status">Planned</span>
-          </div>
+          <button class="secondary-button" id="next-month">→</button>
 
-          <div class="event">
-            <div class="date">
-              <strong>28</strong>
-              <span>SEP</span>
-            </div>
+          <button class="primary-button" id="add-event">+ Add event</button>
+        </div>
 
-            <div class="event-info">
-              <span class="tag innovations-tag">Innovations</span>
-              <h3>Innovation draft</h3>
-              <p>📍 Home</p>
-            </div>
+        <div class="calendar-legend">
+          <span>
+            <i class="legend-dot key-event"></i>
+            Key event
+          </span>
 
-            <span class="event-status">Planned</span>
+          <span>
+            <i class="legend-dot deadline-event"></i>
+            Deadline
+          </span>
+
+          <span>
+            <i class="legend-dot club-event"></i>
+            FLL Club
+          </span>
+        </div>
+
+        <div id="calendar-grid" class="calendar-grid"></div>
+      </section>
+
+      <!-- TASKS -->
+
+      <section id="tasks" class="page-section">
+        <div class="page-heading">
+          <p class="eyebrow">WORK MANAGEMENT</p>
+
+          <h2>Tasks</h2>
+
+          <p>Create tasks, break them into subtasks and track progress.</p>
+        </div>
+
+        <div class="task-toolbar">
+          <button class="primary-button" id="add-task">+ Add task</button>
+
+          <select id="task-filter">
+            <option value="all">All categories</option>
+
+            <option value="innovations">Innovations</option>
+
+            <option value="robot-game">Robot Game</option>
+
+            <option value="robot-design">Robot Design</option>
+
+            <option value="documentation">Documentation</option>
+
+            <option value="presentation">Presentation</option>
+          </select>
+        </div>
+
+        <div id="task-container" class="task-container">
+          <div class="empty-state">
+            <h4>No tasks yet</h4>
+
+            <p>Your team hasn't created any tasks.</p>
           </div>
         </div>
       </section>
 
-      <!-- CLUB -->
-      <section>
-        <div class="section-heading">
-          <h2>FLL Club</h2>
-          <p>Wednesday & Friday attendance.</p>
+      <!-- TEAM -->
+
+      <section id="team" class="page-section">
+        <div class="page-heading">
+          <p class="eyebrow">TEAM</p>
+
+          <h2>Team</h2>
+
+          <p>Manage team members and FLL Club attendance.</p>
         </div>
 
-        <div class="club-card">
-          <div class="club-header">
-            <div>
-              <span class="eyebrow">NEXT SESSION</span>
-              <h3>Wednesday</h3>
-              <p>📍 MU6</p>
+        <div class="team-grid">
+          <div class="panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Team members</h3>
+                <p>Add everyone on the team.</p>
+              </div>
+
+              <button class="primary-button" id="add-member">
+                + Add member
+              </button>
             </div>
 
-            <button class="attendance-button">I'm coming</button>
+            <div id="team-members" class="empty-state">
+              <h4>No team members yet</h4>
+
+              <p>Add your team members here.</p>
+            </div>
           </div>
 
-          <div class="attendance-list">
-            <div class="member">
-              <span class="member-dot"></span>
-              Shrey
+          <div class="panel">
+            <div class="panel-heading">
+              <div>
+                <h3>FLL Club</h3>
+                <p>Wednesday and Friday sessions.</p>
+              </div>
             </div>
 
-            <div class="member">
-              <span class="member-dot"></span>
-              Team member
+            <div class="club-options">
+              <button class="club-day active" data-day="wednesday">
+                Wednesday
+              </button>
+
+              <button class="club-day" data-day="friday">Friday</button>
+            </div>
+
+            <div id="club-attendance" class="empty-state">
+              <h4>No one has opted in</h4>
+
+              <p>Team members can add themselves to the session.</p>
             </div>
           </div>
         </div>
       </section>
     </main>
 
-    <footer>
-      <p>CtrlAltElite • FLL BioGlow 2026</p>
-    </footer>
+    <!-- ADD TASK MODAL -->
+
+    <div id="task-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <p class="eyebrow">NEW TASK</p>
+
+            <h2>Add a task</h2>
+          </div>
+
+          <button class="close-button" id="close-task-modal">×</button>
+        </div>
+
+        <form id="task-form">
+          <label>
+            Task name
+
+            <input
+              type="text"
+              id="task-name"
+              placeholder="e.g. Build robot"
+              required
+            />
+          </label>
+
+          <label>
+            Category
+
+            <select id="task-category" required>
+              <option value="">Choose a category</option>
+
+              <option value="innovations">Innovations</option>
+
+              <option value="robot-game">Robot Game</option>
+
+              <option value="robot-design">Robot Design</option>
+
+              <option value="documentation">Documentation</option>
+
+              <option value="presentation">Presentation</option>
+            </select>
+          </label>
+
+          <label>
+            Assigned to
+
+            <select id="task-assignee">
+              <option value="">Unassigned</option>
+            </select>
+          </label>
+
+          <label>
+            Notes
+
+            <textarea
+              id="task-notes"
+              placeholder="What needs to be done?"
+            ></textarea>
+          </label>
+
+          <label>
+            Due date
+
+            <input type="date" id="task-due-date" />
+          </label>
+
+          <div class="form-buttons">
+            <button type="button" class="secondary-button" id="cancel-task">
+              Cancel
+            </button>
+
+            <button type="submit" class="primary-button">Create task</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ADD EVENT MODAL -->
+
+    <div id="event-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <p class="eyebrow">NEW EVENT</p>
+
+            <h2>Add an event</h2>
+          </div>
+
+          <button class="close-button" id="close-event-modal">×</button>
+        </div>
+
+        <form id="event-form">
+          <label>
+            Event name
+
+            <input
+              type="text"
+              id="event-name"
+              placeholder="e.g. FLL competition"
+              required
+            />
+          </label>
+
+          <label>
+            Event type
+
+            <select id="event-type" required>
+              <option value="">Choose a type</option>
+
+              <option value="key">Key event</option>
+
+              <option value="deadline">Deadline</option>
+
+              <option value="club">FLL Club</option>
+
+              <option value="other">Other</option>
+            </select>
+          </label>
+
+          <label>
+            Date
+
+            <input type="date" id="event-date" required />
+          </label>
+
+          <label>
+            Location
+
+            <input
+              type="text"
+              id="event-location"
+              placeholder="e.g. Perth Modern School"
+            />
+          </label>
+
+          <label>
+            Notes
+
+            <textarea
+              id="event-notes"
+              placeholder="Anything the team needs to know?"
+            ></textarea>
+          </label>
+
+          <div class="form-buttons">
+            <button type="button" class="secondary-button" id="cancel-event">
+              Cancel
+            </button>
+
+            <button type="submit" class="primary-button">Create event</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <footer>CtrlAltElite • FLL BioGlow 2026</footer>
 
     <script src="script.js"></script>
-    ```
   </body>
 </html>
