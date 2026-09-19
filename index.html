@@ -1,58 +1,263 @@
 <!doctype html>
+
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CtrlAltElite | FLL BioGlow 2026</title>
+
+    ```
+    <link rel="stylesheet" href="style.css" />
+    ```
   </head>
 
   <body>
-    <header>
-      <h1>CtrlAltElite</h1>
-      <p>FLL BioGlow 2026</p>
+    ```
+    <header class="topbar">
+      <div>
+        <h1>CtrlAltElite</h1>
+        <p>FLL BioGlow 2026</p>
+      </div>
+
+      <div class="next-event">
+        <span>Next event</span>
+        <strong>FLL Club</strong>
+        <small>Wednesday</small>
+      </div>
     </header>
 
-    <main>
-      <section>
-        <h2>Upcoming</h2>
-
-        <div>
-          <h3>Innovation Project</h3>
-          <p>Research and develop our solution</p>
-          <p>Deadline: TBD</p>
+    <main class="dashboard">
+      <!-- OVERVIEW -->
+      <section class="overview">
+        <div class="welcome">
+          <p class="eyebrow">TEAM COMMAND CENTRE</p>
+          <h2>Let's get this done.</h2>
+          <p>Everything your team needs for BioGlow in one place.</p>
         </div>
 
-        <div>
-          <h3>Robot</h3>
-          <p>Build and test missions</p>
-          <p>Deadline: TBD</p>
-        </div>
+        <div class="progress-card">
+          <div class="progress-heading">
+            <span>Overall progress</span>
+            <strong>0%</strong>
+          </div>
 
-        <div>
-          <h3>Presentation</h3>
-          <p>Prepare judging presentation</p>
-          <p>Deadline: TBD</p>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 0%"></div>
+          </div>
         </div>
       </section>
 
+      <!-- CATEGORIES -->
       <section>
-        <h2>Team Tasks</h2>
+        <div class="section-heading">
+          <h2>Projects</h2>
+          <p>Track progress across each area.</p>
+        </div>
 
-        <ul>
-          <li>Build robot</li>
-          <li>Test robot missions</li>
-          <li>Research innovation project</li>
-          <li>Prepare presentation</li>
-        </ul>
+        <div class="category-grid">
+          <div class="category innovations">
+            <span>🧬</span>
+            <h3>Innovations</h3>
+            <p>0% complete</p>
+            <div class="small-progress">
+              <div style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="category robot-game">
+            <span>🏁</span>
+            <h3>Robot Game</h3>
+            <p>0% complete</p>
+            <div class="small-progress">
+              <div style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="category robot-design">
+            <span>⚙️</span>
+            <h3>Robot Design</h3>
+            <p>0% complete</p>
+            <div class="small-progress">
+              <div style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="category documentation">
+            <span>📄</span>
+            <h3>Documentation</h3>
+            <p>0% complete</p>
+            <div class="small-progress">
+              <div style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="category presentation">
+            <span>🎤</span>
+            <h3>Presentation</h3>
+            <p>0% complete</p>
+            <div class="small-progress">
+              <div style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
       </section>
 
+      <!-- CURRENT TASKS -->
       <section>
-        <h2>Progress</h2>
+        <div class="section-heading">
+          <h2>Working on now</h2>
+          <p>Tasks currently being worked on by the team.</p>
+        </div>
 
-        <p>Robot: 0%</p>
-        <p>Innovation Project: 0%</p>
-        <p>Presentation: 0%</p>
+        <div class="task-list">
+          <div class="task-card">
+            <div class="task-top">
+              <div>
+                <span class="tag robot-design-tag">Robot Design</span>
+                <h3>Build the robot</h3>
+              </div>
+
+              <span class="task-percentage">0%</span>
+            </div>
+
+            <p class="task-note">
+              Find a reliable base model and begin testing attachments.
+            </p>
+
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 0%"></div>
+            </div>
+
+            <div class="task-meta">
+              <span>👤 Unassigned</span>
+              <span>📅 Due TBD</span>
+            </div>
+
+            <div class="subtasks">
+              <div class="subtask">
+                <span>○</span>
+                <span>Find a good base model</span>
+                <strong>0%</strong>
+              </div>
+
+              <div class="subtask">
+                <span>○</span>
+                <span>Test driving stability</span>
+                <strong>0%</strong>
+              </div>
+
+              <div class="subtask">
+                <span>○</span>
+                <span>Design attachment system</span>
+                <strong>0%</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="task-card">
+            <div class="task-top">
+              <div>
+                <span class="tag innovations-tag">Innovations</span>
+                <h3>Develop innovation idea</h3>
+              </div>
+
+              <span class="task-percentage">0%</span>
+            </div>
+
+            <p class="task-note">
+              Research the problem and develop possible solutions.
+            </p>
+
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 0%"></div>
+            </div>
+
+            <div class="task-meta">
+              <span>👤 Unassigned</span>
+              <span>📅 Due TBD</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CALENDAR -->
+      <section>
+        <div class="section-heading">
+          <h2>Upcoming</h2>
+          <p>Important events and deadlines.</p>
+        </div>
+
+        <div class="event-list">
+          <div class="event">
+            <div class="date">
+              <strong>25</strong>
+              <span>SEP</span>
+            </div>
+
+            <div class="event-info">
+              <span class="tag robot-design-tag">Robot Design</span>
+              <h3>Base model research</h3>
+              <p>📍 School</p>
+            </div>
+
+            <span class="event-status">Planned</span>
+          </div>
+
+          <div class="event">
+            <div class="date">
+              <strong>28</strong>
+              <span>SEP</span>
+            </div>
+
+            <div class="event-info">
+              <span class="tag innovations-tag">Innovations</span>
+              <h3>Innovation draft</h3>
+              <p>📍 Home</p>
+            </div>
+
+            <span class="event-status">Planned</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- CLUB -->
+      <section>
+        <div class="section-heading">
+          <h2>FLL Club</h2>
+          <p>Wednesday & Friday attendance.</p>
+        </div>
+
+        <div class="club-card">
+          <div class="club-header">
+            <div>
+              <span class="eyebrow">NEXT SESSION</span>
+              <h3>Wednesday</h3>
+              <p>📍 MU6</p>
+            </div>
+
+            <button class="attendance-button">I'm coming</button>
+          </div>
+
+          <div class="attendance-list">
+            <div class="member">
+              <span class="member-dot"></span>
+              Shrey
+            </div>
+
+            <div class="member">
+              <span class="member-dot"></span>
+              Team member
+            </div>
+          </div>
+        </div>
       </section>
     </main>
+
+    <footer>
+      <p>CtrlAltElite • FLL BioGlow 2026</p>
+    </footer>
+
+    <script src="script.js"></script>
+    ```
   </body>
 </html>

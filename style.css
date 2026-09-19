@@ -1,0 +1,401 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  }
+
+body {
+font-family: Arial, sans-serif;
+background: #f4f6f8;
+color: #17202a;
+line-height: 1.5;
+}
+
+.topbar {
+background: #111827;
+color: white;
+padding: 25px 6%;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.topbar h1 {
+font-size: 30px;
+}
+
+.topbar p {
+color: #aeb7c4;
+}
+
+.next-event {
+text-align: right;
+}
+
+.next-event span {
+display: block;
+font-size: 12px;
+color: #9ca3af;
+text-transform: uppercase;
+}
+
+.next-event strong {
+display: block;
+font-size: 16px;
+}
+
+.next-event small {
+color: #cbd5e1;
+}
+
+.dashboard {
+width: 88%;
+max-width: 1200px;
+margin: 35px auto;
+}
+
+section {
+margin-bottom: 45px;
+}
+
+.overview {
+display: grid;
+grid-template-columns: 1.5fr 1fr;
+gap: 20px;
+}
+
+.welcome,
+.progress-card,
+.category,
+.task-card,
+.event,
+.club-card {
+background: white;
+border-radius: 16px;
+border: 1px solid #e1e5e9;
+}
+
+.welcome {
+padding: 35px;
+}
+
+.welcome h2 {
+font-size: 34px;
+margin: 5px 0;
+}
+
+.welcome p:last-child {
+color: #68717d;
+}
+
+.eyebrow {
+font-size: 12px;
+font-weight: bold;
+letter-spacing: 1.5px;
+color: #68717d;
+}
+
+.progress-card {
+padding: 35px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+}
+
+.progress-heading {
+display: flex;
+justify-content: space-between;
+margin-bottom: 12px;
+}
+
+.progress-heading strong {
+font-size: 20px;
+}
+
+.progress-bar,
+.small-progress {
+background: #e8ecf0;
+height: 9px;
+border-radius: 20px;
+overflow: hidden;
+}
+
+.progress-fill,
+.small-progress div {
+height: 100%;
+background: #17202a;
+border-radius: 20px;
+}
+
+.section-heading {
+margin-bottom: 18px;
+}
+
+.section-heading h2 {
+font-size: 25px;
+}
+
+.section-heading p {
+color: #68717d;
+}
+
+.category-grid {
+display: grid;
+grid-template-columns: repeat(5, 1fr);
+gap: 14px;
+}
+
+.category {
+padding: 22px;
+}
+
+.category > span {
+font-size: 25px;
+}
+
+.category h3 {
+margin-top: 10px;
+font-size: 16px;
+}
+
+.category p {
+color: #68717d;
+font-size: 13px;
+margin: 5px 0 15px;
+}
+
+.small-progress {
+height: 6px;
+}
+
+.task-list {
+display: flex;
+flex-direction: column;
+gap: 15px;
+}
+
+.task-card {
+padding: 25px;
+}
+
+.task-top {
+display: flex;
+justify-content: space-between;
+align-items: flex-start;
+}
+
+.task-top h3 {
+margin-top: 8px;
+font-size: 20px;
+}
+
+.task-percentage {
+font-weight: bold;
+font-size: 18px;
+}
+
+.task-note {
+color: #68717d;
+margin: 10px 0 18px;
+}
+
+.task-meta {
+display: flex;
+gap: 25px;
+margin-top: 12px;
+color: #68717d;
+font-size: 13px;
+}
+
+.tag {
+display: inline-block;
+padding: 4px 9px;
+border-radius: 20px;
+font-size: 11px;
+font-weight: bold;
+}
+
+.robot-design-tag {
+background: #e7edf5;
+color: #3b5068;
+}
+
+.innovations-tag {
+background: #e9f1e9;
+color: #426044;
+}
+
+.subtasks {
+margin-top: 20px;
+border-top: 1px solid #edf0f2;
+padding-top: 10px;
+}
+
+.subtask {
+display: grid;
+grid-template-columns: 25px 1fr 45px;
+padding: 10px 0;
+border-bottom: 1px solid #edf0f2;
+font-size: 14px;
+}
+
+.subtask strong {
+text-align: right;
+color: #68717d;
+}
+
+.event-list {
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+
+.event {
+padding: 18px 22px;
+display: flex;
+align-items: center;
+gap: 20px;
+}
+
+.date {
+width: 55px;
+text-align: center;
+}
+
+.date strong {
+display: block;
+font-size: 25px;
+}
+
+.date span {
+font-size: 11px;
+color: #68717d;
+}
+
+.event-info {
+flex: 1;
+}
+
+.event-info h3 {
+margin: 5px 0;
+}
+
+.event-info p {
+color: #68717d;
+font-size: 13px;
+}
+
+.event-status {
+color: #68717d;
+font-size: 13px;
+}
+
+.club-card {
+padding: 25px;
+}
+
+.club-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.club-header h3 {
+font-size: 23px;
+}
+
+.club-header p {
+color: #68717d;
+}
+
+.attendance-button {
+border: none;
+background: #111827;
+color: white;
+padding: 11px 17px;
+border-radius: 9px;
+cursor: pointer;
+}
+
+.attendance-button:hover {
+opacity: 0.85;
+}
+
+.attendance-list {
+display: flex;
+gap: 15px;
+margin-top: 25px;
+flex-wrap: wrap;
+}
+
+.member {
+background: #f1f3f5;
+padding: 8px 13px;
+border-radius: 20px;
+font-size: 13px;
+}
+
+.member-dot {
+display: inline-block;
+width: 7px;
+height: 7px;
+background: #4d8b52;
+border-radius: 50%;
+margin-right: 5px;
+}
+
+footer {
+text-align: center;
+padding: 30px;
+color: #8a929c;
+font-size: 13px;
+}
+
+@media (max-width: 850px) {
+
+```
+.overview {
+    grid-template-columns: 1fr;
+}
+
+.category-grid {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.topbar {
+    align-items: flex-start;
+    gap: 20px;
+}
+```
+
+}
+
+@media (max-width: 550px) {
+
+```
+.dashboard {
+    width: 92%;
+}
+
+.topbar {
+    flex-direction: column;
+}
+
+.next-event {
+    text-align: left;
+}
+
+.category-grid {
+    grid-template-columns: 1fr;
+}
+
+.event {
+    align-items: flex-start;
+}
+
+.event-status {
+    display: none;
+}
+```
+
+}
