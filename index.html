@@ -14,12 +14,7 @@
         <h1>CtrlAltElite</h1>
         <p>Enter the team password</p>
 
-        <input
-          type="password"
-          id="passwordInput"
-          placeholder="Password"
-          autocomplete="off"
-        />
+        <input type="password" id="passwordInput" placeholder="Password" />
 
         <button id="loginButton">Enter</button>
 
@@ -29,7 +24,7 @@
 
     <div id="site" class="site hidden">
       <header class="topbar">
-        <div>
+        <div class="brand">
           <h1>CtrlAltElite</h1>
           <span>FLL BioGlow 2026</span>
         </div>
@@ -106,9 +101,7 @@
         <!-- CALENDAR -->
         <section id="calendar" class="page-section">
           <div class="section-header">
-            <div>
-              <h2>Calendar</h2>
-            </div>
+            <h2>Calendar</h2>
 
             <button class="primary-button" id="calendarAddEvent">
               + Add event
@@ -117,16 +110,37 @@
 
           <div class="calendar-controls">
             <button id="previousMonth">←</button>
+
             <h2 id="calendarMonth"></h2>
+
             <button id="nextMonth">→</button>
           </div>
 
           <div class="calendar-legend">
-            <span><i class="legend-dot key"></i> Key date</span>
-            <span><i class="legend-dot deadline"></i> Deadline</span>
-            <span><i class="legend-dot task"></i> Task</span>
-            <span><i class="legend-dot club"></i> Club</span>
-            <span><i class="legend-dot other"></i> Other</span>
+            <span>
+              <i class="legend-dot key"></i>
+              Key date
+            </span>
+
+            <span>
+              <i class="legend-dot deadline"></i>
+              Deadline
+            </span>
+
+            <span>
+              <i class="legend-dot task"></i>
+              Task
+            </span>
+
+            <span>
+              <i class="legend-dot club"></i>
+              Club
+            </span>
+
+            <span>
+              <i class="legend-dot other"></i>
+              Other
+            </span>
           </div>
 
           <div class="calendar-weekdays">
@@ -145,27 +159,30 @@
         <!-- TASKS -->
         <section id="tasks" class="page-section">
           <div class="section-header">
-            <div>
-              <h2>Tasks</h2>
-            </div>
+            <h2>Tasks</h2>
 
             <button class="primary-button" id="tasksAddTask">+ Add task</button>
           </div>
 
           <div class="filter-row">
             <button class="filter-button active" data-filter="all">All</button>
+
             <button class="filter-button" data-filter="innovations">
               Innovations
             </button>
+
             <button class="filter-button" data-filter="robot-game">
               Robot Game
             </button>
+
             <button class="filter-button" data-filter="robot-design">
               Robot Design
             </button>
+
             <button class="filter-button" data-filter="documentation">
               Documentation
             </button>
+
             <button class="filter-button" data-filter="presentation">
               Presentation
             </button>
@@ -177,9 +194,7 @@
         <!-- PHOTOS -->
         <section id="photos" class="page-section">
           <div class="section-header">
-            <div>
-              <h2>Photos</h2>
-            </div>
+            <h2>Photos</h2>
 
             <button class="primary-button" id="addPhotoButton">
               + Add photo
@@ -192,9 +207,7 @@
         <!-- TEAM -->
         <section id="team" class="page-section">
           <div class="section-header">
-            <div>
-              <h2>Team</h2>
-            </div>
+            <h2>Team</h2>
 
             <button class="primary-button" id="addMemberButton">
               + Add member
@@ -207,7 +220,7 @@
             <div id="teamMembers" class="team-members"></div>
           </div>
 
-          <div class="panel club-panel">
+          <div class="panel">
             <div class="panel-header">
               <h2>Wednesday & Friday club</h2>
             </div>
@@ -243,21 +256,23 @@
 
             <label>
               Category
-              <select id="taskCategory" required>
+
+              <select id="taskCategory">
                 <option value="innovations">Innovations</option>
+
                 <option value="robot-game">Robot Game</option>
+
                 <option value="robot-design">Robot Design</option>
+
                 <option value="documentation">Documentation</option>
+
                 <option value="presentation">Presentation</option>
               </select>
             </label>
 
-            <label>
-              Assigned to
-              <select id="taskAssignee">
-                <option value="">Nobody</option>
-              </select>
-            </label>
+            <label> Assigned to </label>
+
+            <div id="taskAssignees" class="assignee-list"></div>
 
             <label>
               Notes
@@ -279,6 +294,7 @@
         <div class="modal-box">
           <div class="modal-header">
             <h2>Add event</h2>
+
             <button class="close-modal" data-close="eventModal">×</button>
           </div>
 
@@ -290,9 +306,12 @@
 
             <label>
               Event type
+
               <select id="eventType">
                 <option value="key">Key date</option>
+
                 <option value="deadline">Deadline</option>
+
                 <option value="other">Other</option>
               </select>
             </label>
@@ -322,6 +341,7 @@
         <div class="modal-box">
           <div class="modal-header">
             <h2>Add photo</h2>
+
             <button class="close-modal" data-close="photoModal">×</button>
           </div>
 
@@ -333,10 +353,7 @@
 
             <label>
               Notes
-              <textarea
-                id="photoNotes"
-                placeholder="Add notes about this photo..."
-              ></textarea>
+              <textarea id="photoNotes"></textarea>
             </label>
 
             <button type="submit" class="primary-button">Add photo</button>
