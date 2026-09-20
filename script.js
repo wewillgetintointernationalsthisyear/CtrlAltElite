@@ -14,7 +14,8 @@ let attendance = JSON.parse(localStorage.getItem(ATTENDANCE_KEY)) || {
     wednesday: [],
     friday: []
 };
-let projectProgress = JSON.parse(localStorage.getItem(PROGRESS_KEY)) || {};
+let projectProgress =
+    JSON.parse(localStorage.getItem(PROGRESS_KEY)) || {};
 let photos = JSON.parse(localStorage.getItem(PHOTOS_KEY)) || [];
 
 let currentDate = new Date();
@@ -40,9 +41,9 @@ const progressLevels = [
 ];
 
 
-// =========================
+// =====================================================
 // LOGIN
-// =========================
+// =====================================================
 
 const loginScreen = document.getElementById("loginScreen");
 const site = document.getElementById("site");
@@ -52,7 +53,10 @@ const loginError = document.getElementById("loginError");
 
 function login() {
     if (passwordInput.value === PASSWORD) {
-        sessionStorage.setItem("ctrlaltelite_logged_in", "true");
+        sessionStorage.setItem(
+            "ctrlaltelite_logged_in",
+            "true"
+        );
 
         loginScreen.classList.add("hidden");
         site.classList.remove("hidden");
@@ -66,50 +70,71 @@ function login() {
 
 loginButton.addEventListener("click", login);
 
-passwordInput.addEventListener("keydown", function (event) {
+passwordInput.addEventListener("keydown", event => {
     if (event.key === "Enter") {
         login();
     }
 });
 
-if (sessionStorage.getItem("ctrlaltelite_logged_in") === "true") {
+if (
+    sessionStorage.getItem("ctrlaltelite_logged_in") ===
+    "true"
+) {
     loginScreen.classList.add("hidden");
     site.classList.remove("hidden");
 }
 
 
-// =========================
+// =====================================================
 // SAVE DATA
-// =========================
+// =====================================================
 
 function saveTasks() {
-    localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
+    localStorage.setItem(
+        TASKS_KEY,
+        JSON.stringify(tasks)
+    );
 }
 
 function saveEvents() {
-    localStorage.setItem(EVENTS_KEY, JSON.stringify(events));
+    localStorage.setItem(
+        EVENTS_KEY,
+        JSON.stringify(events)
+    );
 }
 
 function saveMembers() {
-    localStorage.setItem(MEMBERS_KEY, JSON.stringify(members));
+    localStorage.setItem(
+        MEMBERS_KEY,
+        JSON.stringify(members)
+    );
 }
 
 function saveAttendance() {
-    localStorage.setItem(ATTENDANCE_KEY, JSON.stringify(attendance));
+    localStorage.setItem(
+        ATTENDANCE_KEY,
+        JSON.stringify(attendance)
+    );
 }
 
 function saveProgress() {
-    localStorage.setItem(PROGRESS_KEY, JSON.stringify(projectProgress));
+    localStorage.setItem(
+        PROGRESS_KEY,
+        JSON.stringify(projectProgress)
+    );
 }
 
 function savePhotos() {
-    localStorage.setItem(PHOTOS_KEY, JSON.stringify(photos));
+    localStorage.setItem(
+        PHOTOS_KEY,
+        JSON.stringify(photos)
+    );
 }
 
 
-// =========================
+// =====================================================
 // NAVIGATION
-// =========================
+// =====================================================
 
 document.querySelectorAll(".nav-button").forEach(button => {
     button.addEventListener("click", () => {
@@ -125,23 +150,29 @@ document.querySelectorAll(".nav-button").forEach(button => {
             section.classList.remove("active");
         });
 
-        document.getElementById(sectionName).classList.add("active");
+        document
+            .getElementById(sectionName)
+            .classList.add("active");
 
         renderEverything();
     });
 });
 
 
-// =========================
+// =====================================================
 // MODALS
-// =========================
+// =====================================================
 
 function openModal(id) {
-    document.getElementById(id).classList.remove("hidden");
+    document
+        .getElementById(id)
+        .classList.remove("hidden");
 }
 
 function closeModal(id) {
-    document.getElementById(id).classList.add("hidden");
+    document
+        .getElementById(id)
+        .classList.add("hidden");
 }
 
 document.querySelectorAll(".close-modal").forEach(button => {
@@ -159,24 +190,31 @@ document.querySelectorAll(".modal").forEach(modal => {
 });
 
 
-// =========================
-// ADD TASK BUTTONS
-// =========================
+// =====================================================
+// TASK MODAL
+// =====================================================
 
-document.getElementById("dashboardAddTask").addEventListener("click", () => {
-    prepareTaskModal();
-    openModal("taskModal");
-});
+document
+    .getElementById("dashboardAddTask")
+    .addEventListener("click", () => {
+        prepareTaskModal();
+        openModal("taskModal");
+    });
 
-document.getElementById("tasksAddTask").addEventListener("click", () => {
-    prepareTaskModal();
-    openModal("taskModal");
-});
+document
+    .getElementById("tasksAddTask")
+    .addEventListener("click", () => {
+        prepareTaskModal();
+        openModal("taskModal");
+    });
 
 function prepareTaskModal() {
-    document.getElementById("taskForm").reset();
+    document
+        .getElementById("taskForm")
+        .reset();
 
-    const assigneeBox = document.getElementById("taskAssignees");
+    const assigneeBox =
+        document.getElementById("taskAssignees");
 
     assigneeBox.innerHTML = "";
 
@@ -191,11 +229,12 @@ function prepareTaskModal() {
 
     members.forEach(member => {
         const label = document.createElement("label");
+
         label.className = "assignee-option";
 
         label.innerHTML = `
-            <input type="checkbox" value="${member}">
-            <span>${member}</span>
+            <input type="checkbox" value="${escapeHTML(member)}">
+            <span>${escapeHTML(member)}</span>
         `;
 
         assigneeBox.appendChild(label);
@@ -203,51 +242,70 @@ function prepareTaskModal() {
 }
 
 
-// =========================
+// =====================================================
 // ADD TASK
-// =========================
+// =====================================================
 
-document.getElementById("taskForm").addEventListener("submit", event => {
-    event.preventDefault();
+document
+    .getElementById("taskForm")
+    .addEventListener("submit", event => {
+        event.preventDefault();
 
-    const name = document.getElementById("taskName").value.trim();
-    const category = document.getElementById("taskCategory").value;
-    const notes = document.getElementById("taskNotes").value.trim();
-    const dueDate = document.getElementById("taskDueDate").value;
+        const name =
+            document
+                .getElementById("taskName")
+                .value
+                .trim();
 
-    const assignees = [...document.querySelectorAll("#taskAssignees input:checked")]
-        .map(input => input.value);
+        const category =
+            document.getElementById("taskCategory").value;
 
-    const newTask = {
-        id: Date.now(),
-        name,
-        category,
-        assignees,
-        notes,
-        dueDate,
-        progress: 0,
-        subtasks: []
-    };
+        const notes =
+            document
+                .getElementById("taskNotes")
+                .value
+                .trim();
 
-    tasks.push(newTask);
+        const dueDate =
+            document.getElementById("taskDueDate").value;
 
-    saveTasks();
+        const assignees = [
+            ...document.querySelectorAll(
+                "#taskAssignees input:checked"
+            )
+        ].map(input => input.value);
 
-    closeModal("taskModal");
+        tasks.push({
+            id: Date.now(),
+            name,
+            category,
+            assignees,
+            notes,
+            dueDate,
+            progress: 0,
+            subtasks: []
+        });
 
-    renderEverything();
-});
+        saveTasks();
+
+        closeModal("taskModal");
+
+        renderEverything();
+    });
 
 
-// =========================
+// =====================================================
 // TASK PROGRESS
-// =========================
+// =====================================================
 
 function getProgressLabel(value) {
     let closest = progressLevels[0];
 
     progressLevels.forEach(level => {
-        if (Math.abs(level.value - value) < Math.abs(closest.value - value)) {
+        if (
+            Math.abs(level.value - value) <
+            Math.abs(closest.value - value)
+        ) {
             closest = level;
         }
     });
@@ -256,32 +314,39 @@ function getProgressLabel(value) {
 }
 
 function changeTaskProgress(taskId) {
-    const task = tasks.find(t => t.id === taskId);
+    const task = tasks.find(
+        task => task.id === taskId
+    );
 
     if (!task) return;
 
-    const currentIndex = progressLevels.findIndex(
-        level => level.value === task.progress
-    );
+    const currentIndex =
+        progressLevels.findIndex(
+            level => level.value === task.progress
+        );
 
     const nextIndex =
         currentIndex >= progressLevels.length - 1
             ? 0
             : currentIndex + 1;
 
-    task.progress = progressLevels[nextIndex].value;
+    task.progress =
+        progressLevels[nextIndex].value;
 
     saveTasks();
+
     renderEverything();
 }
 
 
-// =========================
+// =====================================================
 // SUBTASKS
-// =========================
+// =====================================================
 
 function addSubtask(taskId) {
-    const task = tasks.find(t => t.id === taskId);
+    const task = tasks.find(
+        task => task.id === taskId
+    );
 
     if (!task) return;
 
@@ -296,118 +361,189 @@ function addSubtask(taskId) {
     });
 
     saveTasks();
+
     renderEverything();
 }
 
 function toggleSubtask(taskId, subtaskId) {
-    const task = tasks.find(t => t.id === taskId);
+    const task = tasks.find(
+        task => task.id === taskId
+    );
 
     if (!task) return;
 
-    const subtask = task.subtasks.find(s => s.id === subtaskId);
+    const subtask = task.subtasks.find(
+        subtask => subtask.id === subtaskId
+    );
 
     if (!subtask) return;
 
     subtask.completed = !subtask.completed;
 
     saveTasks();
+
     renderEverything();
 }
 
 
-// =========================
+// =====================================================
 // DELETE TASK
-// =========================
+// =====================================================
 
 function deleteTask(taskId) {
-    const task = tasks.find(t => t.id === taskId);
+    const task = tasks.find(
+        task => task.id === taskId
+    );
 
     if (!task) return;
 
-    const confirmed = confirm(
-        `Delete "${task.name}"?\n\nThis cannot be undone.`
+    if (
+        !confirm(
+            `Delete "${task.name}"?\n\nThis cannot be undone.`
+        )
+    ) {
+        return;
+    }
+
+    tasks = tasks.filter(
+        task => task.id !== taskId
     );
-
-    if (!confirmed) return;
-
-    tasks = tasks.filter(t => t.id !== taskId);
 
     saveTasks();
+
     renderEverything();
 }
 
 
-// =========================
-// EVENTS
-// =========================
+// =====================================================
+// EVENT MODAL
+// =====================================================
 
-document.getElementById("dashboardAddEvent").addEventListener("click", () => {
-    prepareEventModal();
-    openModal("eventModal");
-});
+document
+    .getElementById("dashboardAddEvent")
+    .addEventListener("click", () => {
+        prepareEventModal();
+        openModal("eventModal");
+    });
 
-document.getElementById("calendarAddEvent").addEventListener("click", () => {
-    prepareEventModal();
-    openModal("eventModal");
-});
+document
+    .getElementById("calendarAddEvent")
+    .addEventListener("click", () => {
+        prepareEventModal();
+        openModal("eventModal");
+    });
 
 function prepareEventModal() {
-    document.getElementById("eventForm").reset();
+    const form =
+        document.getElementById("eventForm");
 
-    const dateInput = document.getElementById("eventDate");
+    form.reset();
 
-    dateInput.value = dateToISO(currentDate);
+    delete form.dataset.editingId;
+
+    document.getElementById("eventDate").value =
+        dateToISO(currentDate);
 }
 
 
-// =========================
-// ADD EVENT
-// =========================
+// =====================================================
+// ADD / EDIT EVENT
+// =====================================================
 
-document.getElementById("eventForm").addEventListener("submit", event => {
-    event.preventDefault();
+document
+    .getElementById("eventForm")
+    .addEventListener("submit", event => {
+        event.preventDefault();
 
-    const name = document.getElementById("eventName").value.trim();
-    const type = document.getElementById("eventType").value;
-    const date = document.getElementById("eventDate").value;
-    const location = document.getElementById("eventLocation").value.trim();
-    const notes = document.getElementById("eventNotes").value.trim();
+        const form = event.target;
 
-    const newEvent = {
-        id: Date.now(),
-        name,
-        type,
-        date,
-        location,
-        notes
-    };
+        const name =
+            document
+                .getElementById("eventName")
+                .value
+                .trim();
 
-    events.push(newEvent);
+        const type =
+            document.getElementById("eventType").value;
 
-    saveEvents();
+        const date =
+            document.getElementById("eventDate").value;
 
-    closeModal("eventModal");
+        const location =
+            document
+                .getElementById("eventLocation")
+                .value
+                .trim();
 
-    renderEverything();
-});
+        const notes =
+            document
+                .getElementById("eventNotes")
+                .value
+                .trim();
+
+        const editingId =
+            form.dataset.editingId;
+
+        // EDIT EXISTING EVENT
+        if (editingId) {
+            const existingEvent = events.find(
+                event =>
+                    event.id === Number(editingId)
+            );
+
+            if (existingEvent) {
+                existingEvent.name = name;
+                existingEvent.type = type;
+                existingEvent.date = date;
+                existingEvent.location = location;
+                existingEvent.notes = notes;
+            }
+
+            delete form.dataset.editingId;
+        }
+
+        // CREATE NEW EVENT
+        else {
+            events.push({
+                id: Date.now(),
+                name,
+                type,
+                date,
+                location,
+                notes
+            });
+        }
+
+        saveEvents();
+
+        closeModal("eventModal");
+
+        renderEverything();
+    });
 
 
-// =========================
+// =====================================================
 // DELETE EVENT
-// =========================
+// =====================================================
 
 function deleteEvent(eventId) {
-    const event = events.find(e => e.id === eventId);
+    const event = events.find(
+        event => event.id === eventId
+    );
 
     if (!event) return;
 
-    const confirmed = confirm(
-        `Delete "${event.name}"?\n\nThis cannot be undone.`
+    if (
+        !confirm(
+            `Delete "${event.name}"?\n\nThis cannot be undone.`
+        )
+    ) {
+        return;
+    }
+
+    events = events.filter(
+        event => event.id !== eventId
     );
-
-    if (!confirmed) return;
-
-    events = events.filter(e => e.id !== eventId);
 
     saveEvents();
 
@@ -415,86 +551,55 @@ function deleteEvent(eventId) {
 }
 
 
-// =========================
+// =====================================================
 // EDIT EVENT
-// =========================
+// =====================================================
 
 function editEvent(eventId) {
-    const event = events.find(e => e.id === eventId);
+    const event = events.find(
+        event => event.id === eventId
+    );
 
     if (!event) return;
 
-    document.getElementById("eventName").value = event.name;
-    document.getElementById("eventType").value = event.type;
-    document.getElementById("eventDate").value = event.date;
-    document.getElementById("eventLocation").value = event.location || "";
-    document.getElementById("eventNotes").value = event.notes || "";
-
-    const form = document.getElementById("eventForm");
+    const form =
+        document.getElementById("eventForm");
 
     form.dataset.editingId = eventId;
 
+    document.getElementById("eventName").value =
+        event.name;
+
+    document.getElementById("eventType").value =
+        event.type;
+
+    document.getElementById("eventDate").value =
+        event.date;
+
+    document.getElementById("eventLocation").value =
+        event.location || "";
+
+    document.getElementById("eventNotes").value =
+        event.notes || "";
+
     openModal("eventModal");
 }
 
 
-// =========================
-// EVENT FORM EDIT SUPPORT
-// =========================
-
-document.getElementById("eventForm").addEventListener("submit", event => {
-    event.preventDefault();
-
-    const form = event.target;
-    const editingId = form.dataset.editingId;
-
-    const name = document.getElementById("eventName").value.trim();
-    const type = document.getElementById("eventType").value;
-    const date = document.getElementById("eventDate").value;
-    const location = document.getElementById("eventLocation").value.trim();
-    const notes = document.getElementById("eventNotes").value.trim();
-
-    if (editingId) {
-        const existingEvent = events.find(
-            e => e.id === Number(editingId)
-        );
-
-        if (existingEvent) {
-            existingEvent.name = name;
-            existingEvent.type = type;
-            existingEvent.date = date;
-            existingEvent.location = location;
-            existingEvent.notes = notes;
-        }
-
-        delete form.dataset.editingId;
-    } else {
-        events.push({
-            id: Date.now(),
-            name,
-            type,
-            date,
-            location,
-            notes
-        });
-    }
-
-    saveEvents();
-
-    closeModal("eventModal");
-
-    renderEverything();
-});
-
-
-// =========================
+// =====================================================
 // CALENDAR
-// =========================
+// =====================================================
 
 function dateToISO(date) {
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
+
+    const month = String(
+        date.getMonth() + 1
+    ).padStart(2, "0");
+
+    const day = String(
+        date.getDate()
+    ).padStart(2, "0");
 
     return `${year}-${month}-${day}`;
 }
@@ -504,7 +609,7 @@ function getCalendarItems(date) {
 
     const items = [];
 
-    // Normal events
+    // EVENTS
     events
         .filter(event => event.date === dateString)
         .forEach(event => {
@@ -518,7 +623,7 @@ function getCalendarItems(date) {
             });
         });
 
-    // Tasks
+    // TASKS
     tasks
         .filter(task => task.dueDate === dateString)
         .forEach(task => {
@@ -532,27 +637,23 @@ function getCalendarItems(date) {
             });
         });
 
-    // Wednesday club
+    // WEDNESDAY CLUB
     if (date.getDay() === 3) {
         items.push({
             id: `club-wednesday-${dateString}`,
             name: "Wednesday Club",
             type: "club",
-            source: "club",
-            location: "",
-            notes: ""
+            source: "club"
         });
     }
 
-    // Friday club
+    // FRIDAY CLUB
     if (date.getDay() === 5) {
         items.push({
             id: `club-friday-${dateString}`,
             name: "Friday Club",
             type: "club",
-            source: "club",
-            location: "",
-            notes: ""
+            source: "club"
         });
     }
 
@@ -560,78 +661,146 @@ function getCalendarItems(date) {
 }
 
 function renderCalendar() {
-    const calendarGrid = document.getElementById("calendarGrid");
-    const calendarMonth = document.getElementById("calendarMonth");
+    const calendarGrid =
+        document.getElementById("calendarGrid");
+
+    const calendarMonth =
+        document.getElementById("calendarMonth");
 
     calendarGrid.innerHTML = "";
 
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
 
-    calendarMonth.textContent = currentDate.toLocaleDateString(
-        "en-AU",
-        {
-            month: "long",
-            year: "numeric"
-        }
-    );
+    calendarMonth.textContent =
+        currentDate.toLocaleDateString(
+            "en-AU",
+            {
+                month: "long",
+                year: "numeric"
+            }
+        );
 
-    const firstDay = new Date(year, month, 1).getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const firstDay =
+        new Date(
+            year,
+            month,
+            1
+        ).getDay();
 
-    for (let i = 0; i < firstDay; i++) {
-        const blank = document.createElement("div");
-        blank.className = "calendar-day empty";
+    const daysInMonth =
+        new Date(
+            year,
+            month + 1,
+            0
+        ).getDate();
+
+    // EMPTY DAYS BEFORE MONTH STARTS
+    for (
+        let i = 0;
+        i < firstDay;
+        i++
+    ) {
+        const blank =
+            document.createElement("div");
+
+        blank.className =
+            "calendar-day empty";
+
         calendarGrid.appendChild(blank);
     }
 
-    for (let day = 1; day <= daysInMonth; day++) {
-        const date = new Date(year, month, day);
+    // MONTH DAYS
+    for (
+        let day = 1;
+        day <= daysInMonth;
+        day++
+    ) {
+        const date =
+            new Date(
+                year,
+                month,
+                day
+            );
 
-        const dayBox = document.createElement("div");
-        dayBox.className = "calendar-day";
+        const dayBox =
+            document.createElement("div");
 
-        const dateNumber = document.createElement("div");
-        dateNumber.className = "calendar-date";
+        dayBox.className =
+            "calendar-day";
+
+        const dateNumber =
+            document.createElement("div");
+
+        dateNumber.className =
+            "calendar-date";
+
         dateNumber.textContent = day;
 
         dayBox.appendChild(dateNumber);
 
-        const items = getCalendarItems(date);
+        const items =
+            getCalendarItems(date);
 
         items.forEach(item => {
-            const itemBox = document.createElement("div");
+            const itemBox =
+                document.createElement("div");
 
-            itemBox.className = `calendar-item ${item.type}`;
+            itemBox.className =
+                `calendar-item ${item.type}`;
 
-            itemBox.textContent = item.name;
+            itemBox.textContent =
+                item.name;
 
+            // EVENT
             if (item.source === "event") {
-                itemBox.title = "Click to edit or delete";
+                itemBox.title =
+                    "Click to edit or delete";
 
-                itemBox.addEventListener("click", () => {
-                    showEventActions(item.id);
-                });
+                itemBox.addEventListener(
+                    "click",
+                    () => {
+                        showEventActions(item.id);
+                    }
+                );
             }
 
+            // TASK
             if (item.source === "task") {
                 itemBox.title = "Task";
 
-                itemBox.addEventListener("click", () => {
-                    const task = tasks.find(t => t.id === item.id);
+                itemBox.addEventListener(
+                    "click",
+                    () => {
+                        const task =
+                            tasks.find(
+                                task =>
+                                    task.id === item.id
+                            );
 
-                    if (task) {
+                        if (!task) return;
+
                         alert(
                             `${task.name}\n\n` +
-                            `Category: ${categoryNames[task.category]}\n` +
-                            `Progress: ${getProgressLabel(task.progress)}`
+                            `Category: ${
+                                categoryNames[
+                                    task.category
+                                ]
+                            }\n` +
+                            `Progress: ${
+                                getProgressLabel(
+                                    task.progress
+                                )
+                            }`
                         );
                     }
-                });
+                );
             }
 
+            // CLUB
             if (item.source === "club") {
-                itemBox.title = "Club session";
+                itemBox.title =
+                    "Club session";
             }
 
             dayBox.appendChild(itemBox);
@@ -642,87 +811,117 @@ function renderCalendar() {
 }
 
 
-// =========================
-// CALENDAR EVENT ACTIONS
-// =========================
+// =====================================================
+// EVENT ACTION MENU
+// =====================================================
 
 function showEventActions(eventId) {
-    const event = events.find(e => e.id === eventId);
+    const event = events.find(
+        event => event.id === eventId
+    );
 
     if (!event) return;
 
-    const action = prompt(
+    const choice = prompt(
         `"${event.name}"\n\n` +
         `Type "edit" to edit this event.\n` +
         `Type "delete" to delete it.\n` +
         `Type "cancel" to do nothing.`
     );
 
-    if (!action) return;
+    if (!choice) return;
 
-    const choice = action.trim().toLowerCase();
+    const action =
+        choice.trim().toLowerCase();
 
-    if (choice === "delete") {
+    if (action === "delete") {
         deleteEvent(eventId);
-    } else if (choice === "edit") {
+    }
+
+    if (action === "edit") {
         editEvent(eventId);
     }
 }
 
 
-// =========================
+// =====================================================
 // CALENDAR NAVIGATION
-// =========================
+// =====================================================
 
-document.getElementById("previousMonth").addEventListener("click", () => {
-    currentDate.setMonth(currentDate.getMonth() - 1);
+document
+    .getElementById("previousMonth")
+    .addEventListener("click", () => {
+        currentDate.setMonth(
+            currentDate.getMonth() - 1
+        );
 
-    renderCalendar();
-    renderDashboard();
-});
-
-document.getElementById("nextMonth").addEventListener("click", () => {
-    currentDate.setMonth(currentDate.getMonth() + 1);
-
-    renderCalendar();
-    renderDashboard();
-});
-
-
-// =========================
-// TASK FILTERS
-// =========================
-
-document.querySelectorAll(".filter-button").forEach(button => {
-    button.addEventListener("click", () => {
-        currentFilter = button.dataset.filter;
-
-        document.querySelectorAll(".filter-button").forEach(btn => {
-            btn.classList.remove("active");
-        });
-
-        button.classList.add("active");
-
-        renderTasks();
+        renderCalendar();
+        renderDashboard();
     });
-});
+
+document
+    .getElementById("nextMonth")
+    .addEventListener("click", () => {
+        currentDate.setMonth(
+            currentDate.getMonth() + 1
+        );
+
+        renderCalendar();
+        renderDashboard();
+    });
 
 
-// =========================
+// =====================================================
+// TASK FILTERS
+// =====================================================
+
+document.querySelectorAll(".filter-button")
+    .forEach(button => {
+        button.addEventListener(
+            "click",
+            () => {
+                currentFilter =
+                    button.dataset.filter;
+
+                document
+                    .querySelectorAll(
+                        ".filter-button"
+                    )
+                    .forEach(btn => {
+                        btn.classList.remove(
+                            "active"
+                        );
+                    });
+
+                button.classList.add(
+                    "active"
+                );
+
+                renderTasks();
+            }
+        );
+    });
+
+
+// =====================================================
 // RENDER TASKS
-// =========================
+// =====================================================
 
 function renderTasks() {
-    const taskList = document.getElementById("taskList");
+    const taskList =
+        document.getElementById("taskList");
 
     taskList.innerHTML = "";
 
     let filteredTasks = tasks;
 
     if (currentFilter !== "all") {
-        filteredTasks = tasks.filter(
-            task => task.category === currentFilter
-        );
+        filteredTasks =
+            tasks.filter(
+                task =>
+                    task.category ===
+                    currentFilter
+            );
     }
 
     if (filteredTasks.length === 0) {
@@ -736,18 +935,27 @@ function renderTasks() {
     }
 
     filteredTasks.forEach(task => {
-        const card = document.createElement("div");
-        card.className = "task-card";
+        const card =
+            document.createElement("div");
 
-        const progressLabel = getProgressLabel(task.progress);
+        card.className =
+            "task-card";
 
         let assigneeHTML = "";
 
-        if (task.assignees && task.assignees.length > 0) {
+        if (
+            task.assignees &&
+            task.assignees.length > 0
+        ) {
             assigneeHTML = `
                 <div class="task-assignees">
                     ${task.assignees
-                        .map(person => `<span>${person}</span>`)
+                        .map(
+                            person =>
+                                `<span>${escapeHTML(
+                                    person
+                                )}</span>`
+                        )
                         .join("")}
                 </div>
             `;
@@ -755,22 +963,41 @@ function renderTasks() {
 
         let subtasksHTML = "";
 
-        if (task.subtasks.length > 0) {
+        if (
+            task.subtasks &&
+            task.subtasks.length > 0
+        ) {
             subtasksHTML = `
                 <div class="subtasks">
                     ${task.subtasks
-                        .map(subtask => `
-                            <label class="subtask">
-                                <input
-                                    type="checkbox"
-                                    ${subtask.completed ? "checked" : ""}
-                                    onchange="toggleSubtask(${task.id}, ${subtask.id})"
-                                >
-                                <span class="${subtask.completed ? "completed" : ""}">
-                                    ${subtask.name}
-                                </span>
-                            </label>
-                        `)
+                        .map(
+                            subtask => `
+                                <label class="subtask">
+                                    <input
+                                        type="checkbox"
+                                        ${
+                                            subtask.completed
+                                                ? "checked"
+                                                : ""
+                                        }
+                                        onchange="toggleSubtask(
+                                            ${task.id},
+                                            ${subtask.id}
+                                        )"
+                                    >
+
+                                    <span class="${
+                                        subtask.completed
+                                            ? "completed"
+                                            : ""
+                                    }">
+                                        ${escapeHTML(
+                                            subtask.name
+                                        )}
+                                    </span>
+                                </label>
+                            `
+                        )
                         .join("")}
                 </div>
             `;
@@ -779,9 +1006,16 @@ function renderTasks() {
         card.innerHTML = `
             <div class="task-top">
                 <div>
-                    <h3>${task.name}</h3>
+                    <h3>
+                        ${escapeHTML(task.name)}
+                    </h3>
+
                     <span class="category-tag">
-                        ${categoryNames[task.category]}
+                        ${
+                            categoryNames[
+                                task.category
+                            ]
+                        }
                     </span>
                 </div>
 
@@ -797,13 +1031,21 @@ function renderTasks() {
 
             ${
                 task.notes
-                    ? `<p class="task-notes">${task.notes}</p>`
+                    ? `
+                        <p class="task-notes">
+                            ${escapeHTML(task.notes)}
+                        </p>
+                    `
                     : ""
             }
 
             ${
                 task.dueDate
-                    ? `<p class="task-date">Due: ${task.dueDate}</p>`
+                    ? `
+                        <p class="task-date">
+                            Due: ${task.dueDate}
+                        </p>
+                    `
                     : ""
             }
 
@@ -813,16 +1055,22 @@ function renderTasks() {
 
                     <button
                         class="progress-word"
-                        onclick="changeTaskProgress(${task.id})"
+                        onclick="changeTaskProgress(
+                            ${task.id}
+                        )"
                     >
-                        ${progressLabel}
+                        ${getProgressLabel(
+                            task.progress
+                        )}
                     </button>
                 </div>
 
                 <div class="progress-track">
                     <div
                         class="progress-fill"
-                        style="width: ${task.progress}%"
+                        style="width: ${
+                            task.progress
+                        }%"
                     ></div>
                 </div>
             </div>
@@ -842,20 +1090,32 @@ function renderTasks() {
 }
 
 
-// =========================
+// =====================================================
 // DASHBOARD
-// =========================
+// =====================================================
 
 function renderDashboard() {
-    const dashboardTasks = document.getElementById("dashboardTasks");
-    const dashboardEvents = document.getElementById("dashboardEvents");
+    const dashboardTasks =
+        document.getElementById(
+            "dashboardTasks"
+        );
+
+    const dashboardEvents =
+        document.getElementById(
+            "dashboardEvents"
+        );
 
     dashboardTasks.innerHTML = "";
     dashboardEvents.innerHTML = "";
 
-    const activeTasks = tasks
-        .filter(task => task.progress < 100)
-        .slice(0, 6);
+    // ACTIVE TASKS
+    const activeTasks =
+        tasks
+            .filter(
+                task =>
+                    task.progress < 100
+            )
+            .slice(0, 6);
 
     if (activeTasks.length === 0) {
         dashboardTasks.innerHTML = `
@@ -865,21 +1125,36 @@ function renderDashboard() {
         `;
     } else {
         activeTasks.forEach(task => {
-            const item = document.createElement("div");
+            const item =
+                document.createElement("div");
 
-            item.className = "dashboard-item";
+            item.className =
+                "dashboard-item";
 
             item.innerHTML = `
                 <div>
-                    <strong>${task.name}</strong>
-                    <small>${categoryNames[task.category]}</small>
+                    <strong>
+                        ${escapeHTML(task.name)}
+                    </strong>
+
+                    <small>
+                        ${
+                            categoryNames[
+                                task.category
+                            ]
+                        }
+                    </small>
                 </div>
 
                 <button
                     class="progress-word"
-                    onclick="changeTaskProgress(${task.id})"
+                    onclick="changeTaskProgress(
+                        ${task.id}
+                    )"
                 >
-                    ${getProgressLabel(task.progress)}
+                    ${getProgressLabel(
+                        task.progress
+                    )}
                 </button>
             `;
 
@@ -887,19 +1162,34 @@ function renderDashboard() {
         });
     }
 
+    // UPCOMING EVENTS
     const today = new Date();
 
-    const upcomingEvents = events
-        .filter(event => {
-            const eventDate = new Date(event.date + "T00:00:00");
-            return eventDate >= new Date(
-                today.getFullYear(),
-                today.getMonth(),
-                today.getDate()
-            );
-        })
-        .sort((a, b) => a.date.localeCompare(b.date))
-        .slice(0, 6);
+    const todayStart =
+        new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            today.getDate()
+        );
+
+    const upcomingEvents =
+        events
+            .filter(event => {
+                const eventDate =
+                    new Date(
+                        event.date +
+                        "T00:00:00"
+                    );
+
+                return eventDate >= todayStart;
+            })
+            .sort(
+                (a, b) =>
+                    a.date.localeCompare(
+                        b.date
+                    )
+            )
+            .slice(0, 6);
 
     if (upcomingEvents.length === 0) {
         dashboardEvents.innerHTML = `
@@ -909,33 +1199,50 @@ function renderDashboard() {
         `;
     } else {
         upcomingEvents.forEach(event => {
-            const item = document.createElement("div");
+            const item =
+                document.createElement("div");
 
-            item.className = "dashboard-item";
+            item.className =
+                "dashboard-item";
 
             item.innerHTML = `
                 <div>
-                    <strong>${event.name}</strong>
+                    <strong>
+                        ${escapeHTML(event.name)}
+                    </strong>
+
                     <small>
                         ${event.date}
-                        ${event.location ? " • " + event.location : ""}
+                        ${
+                            event.location
+                                ? ` • ${escapeHTML(
+                                    event.location
+                                )}`
+                                : ""
+                        }
                     </small>
                 </div>
 
                 <div class="event-actions">
+
                     <button
                         class="small-button"
-                        onclick="editEvent(${event.id})"
+                        onclick="editEvent(
+                            ${event.id}
+                        )"
                     >
                         Edit
                     </button>
 
                     <button
                         class="delete-button"
-                        onclick="deleteEvent(${event.id})"
+                        onclick="deleteEvent(
+                            ${event.id}
+                        )"
                     >
                         Delete
                     </button>
+
                 </div>
             `;
 
@@ -947,99 +1254,153 @@ function renderDashboard() {
 }
 
 
-// =========================
+// =====================================================
 // PROJECT PROGRESS
-// =========================
+// =====================================================
 
 function renderProjectProgress() {
-    const container = document.getElementById("projectProgress");
+    const container =
+        document.getElementById(
+            "projectProgress"
+        );
 
     container.innerHTML = "";
 
-    Object.keys(categoryNames).forEach(category => {
-        const value =
-            projectProgress[category] !== undefined
-                ? projectProgress[category]
-                : 0;
+    Object.keys(categoryNames)
+        .forEach(category => {
+            const value =
+                projectProgress[
+                    category
+                ] !== undefined
+                    ? projectProgress[
+                        category
+                    ]
+                    : 0;
 
-        const label = getProgressLabel(value);
+            const button =
+                document.createElement(
+                    "button"
+                );
 
-        const button = document.createElement("button");
+            button.className =
+                "project-progress-item";
 
-        button.className = "project-progress-item";
+            button.innerHTML = `
+                <span>
+                    ${
+                        categoryNames[
+                            category
+                        ]
+                    }
+                </span>
 
-        button.innerHTML = `
-            <span>${categoryNames[category]}</span>
-            <strong>${label}</strong>
-        `;
+                <strong>
+                    ${getProgressLabel(
+                        value
+                    )}
+                </strong>
+            `;
 
-        button.addEventListener("click", () => {
-            chooseProjectProgress(category);
+            button.addEventListener(
+                "click",
+                () => {
+                    chooseProjectProgress(
+                        category
+                    );
+                }
+            );
+
+            container.appendChild(button);
         });
-
-        container.appendChild(button);
-    });
 }
 
 function chooseProjectProgress(category) {
     const currentValue =
-        projectProgress[category] !== undefined
-            ? projectProgress[category]
+        projectProgress[
+            category
+        ] !== undefined
+            ? projectProgress[
+                category
+            ]
             : 0;
 
-    const currentIndex = progressLevels.findIndex(
-        level => level.value === currentValue
-    );
-
-    const options = progressLevels
-        .map((level, index) => `${index + 1}. ${level.label}`)
-        .join("\n");
+    const options =
+        progressLevels
+            .map(
+                (level, index) =>
+                    `${index + 1}. ${level.label}`
+            )
+            .join("\n");
 
     const answer = prompt(
         `${categoryNames[category]}\n\n` +
-        `Current: ${getProgressLabel(currentValue)}\n\n` +
+        `Current: ${getProgressLabel(
+            currentValue
+        )}\n\n` +
         `${options}\n\n` +
         `Enter a number from 1-${progressLevels.length}:`
     );
 
     if (!answer) return;
 
-    const selectedIndex = Number(answer) - 1;
+    const selectedIndex =
+        Number(answer) - 1;
 
     if (
+        Number.isNaN(selectedIndex) ||
         selectedIndex < 0 ||
-        selectedIndex >= progressLevels.length ||
-        Number.isNaN(selectedIndex)
+        selectedIndex >=
+            progressLevels.length
     ) {
         return;
     }
 
-    projectProgress[category] =
-        progressLevels[selectedIndex].value;
+    projectProgress[
+        category
+    ] =
+        progressLevels[
+            selectedIndex
+        ].value;
 
     saveProgress();
+
     renderProjectProgress();
 }
 
 
-// =========================
+// =====================================================
 // TEAM MEMBERS
-// =========================
+// =====================================================
 
-document.getElementById("addMemberButton").addEventListener("click", () => {
-    const name = prompt("Team member name:");
+document
+    .getElementById("addMemberButton")
+    .addEventListener("click", () => {
+        const name =
+            prompt(
+                "Team member name:"
+            );
 
-    if (!name || !name.trim()) return;
+        if (
+            !name ||
+            !name.trim()
+        ) {
+            return;
+        }
 
-    members.push(name.trim());
+        members.push(
+            name.trim()
+        );
 
-    saveMembers();
+        saveMembers();
 
-    renderEverything();
-});
+        renderEverything();
+    });
 
 function renderTeam() {
-    const teamMembers = document.getElementById("teamMembers");
+    const teamMembers =
+        document.getElementById(
+            "teamMembers"
+        );
 
     teamMembers.innerHTML = "";
 
@@ -1050,52 +1411,78 @@ function renderTeam() {
             </div>
         `;
     } else {
-        members.forEach((member, index) => {
-            const memberBox = document.createElement("div");
+        members.forEach(
+            (member, index) => {
+                const memberBox =
+                    document.createElement(
+                        "div"
+                    );
 
-            memberBox.className = "team-member";
+                memberBox.className =
+                    "team-member";
 
-            memberBox.innerHTML = `
-                <span>${member}</span>
+                memberBox.innerHTML = `
+                    <span>
+                        ${escapeHTML(member)}
+                    </span>
 
-                <button
-                    class="delete-button"
-                    onclick="deleteMember(${index})"
-                >
-                    Delete
-                </button>
-            `;
+                    <button
+                        class="delete-button"
+                        onclick="deleteMember(
+                            ${index}
+                        )"
+                    >
+                        Delete
+                    </button>
+                `;
 
-            teamMembers.appendChild(memberBox);
-        });
+                teamMembers.appendChild(
+                    memberBox
+                );
+            }
+        );
     }
 
     renderAttendance();
 }
 
 function deleteMember(index) {
-    const member = members[index];
+    const member =
+        members[index];
 
     if (!member) return;
 
-    const confirmed = confirm(
-        `Remove ${member} from the team?`
+    if (
+        !confirm(
+            `Remove ${member} from the team?`
+        )
+    ) {
+        return;
+    }
+
+    members.splice(
+        index,
+        1
     );
 
-    if (!confirmed) return;
-
-    members.splice(index, 1);
-
     attendance.wednesday =
-        attendance.wednesday.filter(name => name !== member);
+        attendance.wednesday.filter(
+            name =>
+                name !== member
+        );
 
     attendance.friday =
-        attendance.friday.filter(name => name !== member);
+        attendance.friday.filter(
+            name =>
+                name !== member
+        );
 
     tasks.forEach(task => {
-        task.assignees = task.assignees.filter(
-            name => name !== member
-        );
+        task.assignees =
+            task.assignees.filter(
+                name =>
+                    name !== member
+            );
     });
 
     saveMembers();
@@ -1106,124 +1493,200 @@ function deleteMember(index) {
 }
 
 
-// =========================
+// =====================================================
 // CLUB ATTENDANCE
-// =========================
+// =====================================================
 
 function renderAttendance() {
-    const wednesday = document.getElementById("wednesdayAttendance");
-    const friday = document.getElementById("fridayAttendance");
+    const wednesday =
+        document.getElementById(
+            "wednesdayAttendance"
+        );
+
+    const friday =
+        document.getElementById(
+            "fridayAttendance"
+        );
 
     wednesday.innerHTML = "";
     friday.innerHTML = "";
 
     members.forEach(member => {
-        const wedLabel = document.createElement("label");
-        wedLabel.className = "attendance-option";
+
+        // WEDNESDAY
+        const wedLabel =
+            document.createElement(
+                "label"
+            );
+
+        wedLabel.className =
+            "attendance-option";
 
         wedLabel.innerHTML = `
             <input
                 type="checkbox"
-                ${attendance.wednesday.includes(member) ? "checked" : ""}
+                ${
+                    attendance.wednesday.includes(
+                        member
+                    )
+                        ? "checked"
+                        : ""
+                }
             >
-            ${member}
+            ${escapeHTML(member)}
         `;
 
-        wedLabel.querySelector("input").addEventListener(
-            "change",
-            event => {
-                updateAttendance(
-                    "wednesday",
-                    member,
-                    event.target.checked
-                );
-            }
+        wedLabel
+            .querySelector("input")
+            .addEventListener(
+                "change",
+                event => {
+                    updateAttendance(
+                        "wednesday",
+                        member,
+                        event.target.checked
+                    );
+                }
+            );
+
+        wednesday.appendChild(
+            wedLabel
         );
 
-        wednesday.appendChild(wedLabel);
+        // FRIDAY
+        const friLabel =
+            document.createElement(
+                "label"
+            );
 
-        const friLabel = document.createElement("label");
-        friLabel.className = "attendance-option";
+        friLabel.className =
+            "attendance-option";
 
         friLabel.innerHTML = `
             <input
                 type="checkbox"
-                ${attendance.friday.includes(member) ? "checked" : ""}
+                ${
+                    attendance.friday.includes(
+                        member
+                    )
+                        ? "checked"
+                        : ""
+                }
             >
-            ${member}
+            ${escapeHTML(member)}
         `;
 
-        friLabel.querySelector("input").addEventListener(
-            "change",
-            event => {
-                updateAttendance(
-                    "friday",
-                    member,
-                    event.target.checked
-                );
-            }
-        );
+        friLabel
+            .querySelector("input")
+            .addEventListener(
+                "change",
+                event => {
+                    updateAttendance(
+                        "friday",
+                        member,
+                        event.target.checked
+                    );
+                }
+            );
 
-        friday.appendChild(friLabel);
+        friday.appendChild(
+            friLabel
+        );
     });
 }
 
-function updateAttendance(day, member, attending) {
+function updateAttendance(
+    day,
+    member,
+    attending
+) {
     if (attending) {
-        if (!attendance[day].includes(member)) {
-            attendance[day].push(member);
+        if (
+            !attendance[day].includes(
+                member
+            )
+        ) {
+            attendance[day].push(
+                member
+            );
         }
     } else {
         attendance[day] =
-            attendance[day].filter(name => name !== member);
+            attendance[day].filter(
+                name =>
+                    name !== member
+            );
     }
 
     saveAttendance();
 }
 
 
-// =========================
+// =====================================================
 // PHOTOS
-// =========================
+// =====================================================
 
-document.getElementById("addPhotoButton").addEventListener("click", () => {
-    document.getElementById("photoForm").reset();
+document
+    .getElementById("addPhotoButton")
+    .addEventListener("click", () => {
+        document
+            .getElementById(
+                "photoForm"
+            )
+            .reset();
 
-    openModal("photoModal");
-});
+        openModal("photoModal");
+    });
 
-document.getElementById("photoForm").addEventListener("submit", event => {
-    event.preventDefault();
+document
+    .getElementById("photoForm")
+    .addEventListener(
+        "submit",
+        event => {
+            event.preventDefault();
 
-    const file =
-        document.getElementById("photoFile").files[0];
+            const file =
+                document.getElementById(
+                    "photoFile"
+                ).files[0];
 
-    const notes =
-        document.getElementById("photoNotes").value.trim();
+            const notes =
+                document.getElementById(
+                    "photoNotes"
+                ).value.trim();
 
-    if (!file) return;
+            if (!file) return;
 
-    const reader = new FileReader();
+            const reader =
+                new FileReader();
 
-    reader.onload = function () {
-        photos.push({
-            id: Date.now(),
-            image: reader.result,
-            notes
-        });
+            reader.onload = function () {
+                photos.push({
+                    id: Date.now(),
+                    image: reader.result,
+                    notes
+                });
 
-        savePhotos();
+                savePhotos();
 
-        closeModal("photoModal");
+                closeModal(
+                    "photoModal"
+                );
 
-        renderPhotos();
-    };
+                renderPhotos();
+            };
 
-    reader.readAsDataURL(file);
-});
+            reader.readAsDataURL(
+                file
+            );
+        }
+    );
 
 function renderPhotos() {
-    const photoGrid = document.getElementById("photoGrid");
+    const photoGrid =
+        document.getElementById(
+            "photoGrid"
+        );
 
     photoGrid.innerHTML = "";
 
@@ -1238,39 +1701,62 @@ function renderPhotos() {
     }
 
     photos.forEach(photo => {
-        const card = document.createElement("div");
+        const card =
+            document.createElement(
+                "div"
+            );
 
-        card.className = "photo-card";
+        card.className =
+            "photo-card";
 
         card.innerHTML = `
-            <img src="${photo.image}" alt="Team photo">
+            <img
+                src="${photo.image}"
+                alt="Team photo"
+            >
 
             ${
                 photo.notes
-                    ? `<p>${photo.notes}</p>`
+                    ? `
+                        <p>
+                            ${escapeHTML(
+                                photo.notes
+                            )}
+                        </p>
+                    `
                     : ""
             }
 
             <button
                 class="delete-button"
-                onclick="deletePhoto(${photo.id})"
+                onclick="deletePhoto(
+                    ${photo.id}
+                )"
             >
                 Delete
             </button>
         `;
 
-        photoGrid.appendChild(card);
+        photoGrid.appendChild(
+            card
+        );
     });
 }
 
 function deletePhoto(photoId) {
-    const confirmed = confirm(
-        "Delete this photo?"
-    );
+    if (
+        !confirm(
+            "Delete this photo?"
+        )
+    ) {
+        return;
+    }
 
-    if (!confirmed) return;
-
-    photos = photos.filter(photo => photo.id !== photoId);
+    photos =
+        photos.filter(
+            photo =>
+                photo.id !== photoId
+        );
 
     savePhotos();
 
@@ -1278,40 +1764,58 @@ function deletePhoto(photoId) {
 }
 
 
-// =========================
+// =====================================================
 // STATS
-// =========================
+// =====================================================
 
 function updateStats() {
-    document.getElementById("statTasks").textContent =
+    document.getElementById(
+        "statTasks"
+    ).textContent =
         tasks.length;
 
-    const today = new Date();
+    const today =
+        new Date();
 
-    const upcomingCount = events.filter(event => {
-        const date = new Date(event.date + "T00:00:00");
-
-        return date >= new Date(
+    const todayStart =
+        new Date(
             today.getFullYear(),
             today.getMonth(),
             today.getDate()
         );
-    }).length;
 
-    document.getElementById("statEvents").textContent =
+    const upcomingCount =
+        events.filter(event => {
+            const date =
+                new Date(
+                    event.date +
+                    "T00:00:00"
+                );
+
+            return date >= todayStart;
+        }).length;
+
+    document.getElementById(
+        "statEvents"
+    ).textContent =
         upcomingCount;
 
-    const todayISO = dateToISO(today);
+    const todayISO =
+        dateToISO(today);
 
-    const overdue = tasks.filter(task => {
-        return (
-            task.dueDate &&
-            task.dueDate < todayISO &&
-            task.progress < 100
-        );
-    }).length;
+    const overdue =
+        tasks.filter(task => {
+            return (
+                task.dueDate &&
+                task.dueDate <
+                    todayISO &&
+                task.progress < 100
+            );
+        }).length;
 
-    document.getElementById("statOverdue").textContent =
+    document.getElementById(
+        "statOverdue"
+    ).textContent =
         overdue;
 
     let progress = 0;
@@ -1319,19 +1823,46 @@ function updateStats() {
     if (tasks.length > 0) {
         progress =
             tasks.reduce(
-                (total, task) => total + task.progress,
+                (
+                    total,
+                    task
+                ) =>
+                    total +
+                    task.progress,
                 0
             ) / tasks.length;
     }
 
-    document.getElementById("statProgress").textContent =
-        `${Math.round(progress)}%`;
+    document.getElementById(
+        "statProgress"
+    ).textContent =
+        `${Math.round(
+            progress
+        )}%`;
 }
 
 
-// =========================
+// =====================================================
+// SECURITY / HTML HELPER
+// =====================================================
+
+function escapeHTML(value) {
+    if (value === undefined || value === null) {
+        return "";
+    }
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+// =====================================================
 // RENDER EVERYTHING
-// =========================
+// =====================================================
 
 function renderEverything() {
     renderCalendar();
@@ -1343,7 +1874,14 @@ function renderEverything() {
 }
 
 
-// Initial render
-if (sessionStorage.getItem("ctrlaltelite_logged_in") === "true") {
+// =====================================================
+// INITIAL RENDER
+// =====================================================
+
+if (
+    sessionStorage.getItem(
+        "ctrlaltelite_logged_in"
+    ) === "true"
+) {
     renderEverything();
 }
