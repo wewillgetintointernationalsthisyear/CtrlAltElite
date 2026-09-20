@@ -18,6 +18,62 @@ let projectProgress =
     JSON.parse(localStorage.getItem(PROGRESS_KEY)) || {};
 let photos = JSON.parse(localStorage.getItem(PHOTOS_KEY)) || [];
 
+
+// Convert old member objects into normal names
+members = members.map(member => {
+    if (typeof member === "string") {
+        return member;
+    }
+
+    if (member && typeof member === "object") {
+        return (
+            member.name ||
+            member.member ||
+            member.fullName ||
+            "Unnamed member"
+        );
+    }
+
+    return String(member);
+});
+
+saveMembers();
+
+
+// Make sure attendance uses normal names too
+attendance.wednesday = attendance.wednesday.map(member => {
+    if (typeof member === "string") return member;
+
+    if (member && typeof member === "object") {
+        return (
+            member.name ||
+            member.member ||
+            member.fullName ||
+            "Unnamed member"
+        );
+    }
+
+    return String(member);
+});
+
+attendance.friday = attendance.friday.map(member => {
+    if (typeof member === "string") return member;
+
+    if (member && typeof member === "object") {
+        return (
+            member.name ||
+            member.member ||
+            member.fullName ||
+            "Unnamed member"
+        );
+    }
+
+    return String(member);
+});
+
+saveAttendance();
+
+
 let currentDate = new Date();
 let currentFilter = "all";
 
@@ -39,11 +95,6 @@ const progressLevels = [
     { value: 90, label: "Basically done" },
     { value: 100, label: "Competition ready" }
 ];
-
-
-// =====================================================
-// LOGIN
-// =====================================================
 
 const loginScreen = document.getElementById("loginScreen");
 const site = document.getElementById("site");
@@ -83,11 +134,6 @@ if (
     loginScreen.classList.add("hidden");
     site.classList.remove("hidden");
 }
-
-
-// =====================================================
-// SAVE DATA
-// =====================================================
 
 function saveTasks() {
     localStorage.setItem(
@@ -131,11 +177,6 @@ function savePhotos() {
     );
 }
 
-
-// =====================================================
-// NAVIGATION
-// =====================================================
-
 document.querySelectorAll(".nav-button").forEach(button => {
     button.addEventListener("click", () => {
         const sectionName = button.dataset.section;
@@ -157,11 +198,6 @@ document.querySelectorAll(".nav-button").forEach(button => {
         renderEverything();
     });
 });
-
-
-// =====================================================
-// MODALS
-// =====================================================
 
 function openModal(id) {
     document
@@ -190,9 +226,7 @@ document.querySelectorAll(".modal").forEach(modal => {
 });
 
 
-// =====================================================
-// TASK MODAL
-// =====================================================
+/* TASKS */
 
 document
     .getElementById("dashboardAddTask")
@@ -241,11 +275,6 @@ function prepareTaskModal() {
     });
 }
 
-
-// =====================================================
-// ADD TASK
-// =====================================================
-
 document
     .getElementById("taskForm")
     .addEventListener("submit", event => {
@@ -293,11 +322,6 @@ document
         renderEverything();
     });
 
-
-// =====================================================
-// TASK PROGRESS
-// =====================================================
-
 function getProgressLabel(value) {
     let closest = progressLevels[0];
 
@@ -337,11 +361,6 @@ function changeTaskProgress(taskId) {
 
     renderEverything();
 }
-
-
-// =====================================================
-// SUBTASKS
-// =====================================================
 
 function addSubtask(taskId) {
     const task = tasks.find(
@@ -385,11 +404,6 @@ function toggleSubtask(taskId, subtaskId) {
     renderEverything();
 }
 
-
-// =====================================================
-// DELETE TASK
-// =====================================================
-
 function deleteTask(taskId) {
     const task = tasks.find(
         task => task.id === taskId
@@ -415,9 +429,7 @@ function deleteTask(taskId) {
 }
 
 
-// =====================================================
-// EVENT MODAL
-// =====================================================
+/* EVENTS */
 
 document
     .getElementById("dashboardAddEvent")
@@ -444,11 +456,6 @@ function prepareEventModal() {
     document.getElementById("eventDate").value =
         dateToISO(currentDate);
 }
-
-
-// =====================================================
-// ADD / EDIT EVENT
-// =====================================================
 
 document
     .getElementById("eventForm")
@@ -484,7 +491,6 @@ document
         const editingId =
             form.dataset.editingId;
 
-        // EDIT EXISTING EVENT
         if (editingId) {
             const existingEvent = events.find(
                 event =>
@@ -500,10 +506,7 @@ document
             }
 
             delete form.dataset.editingId;
-        }
-
-        // CREATE NEW EVENT
-        else {
+        } else {
             events.push({
                 id: Date.now(),
                 name,
@@ -520,11 +523,6 @@ document
 
         renderEverything();
     });
-
-
-// =====================================================
-// DELETE EVENT
-// =====================================================
 
 function deleteEvent(eventId) {
     const event = events.find(
@@ -549,11 +547,6 @@ function deleteEvent(eventId) {
 
     renderEverything();
 }
-
-
-// =====================================================
-// EDIT EVENT
-// =====================================================
 
 function editEvent(eventId) {
     const event = events.find(
@@ -585,11 +578,6 @@ function editEvent(eventId) {
     openModal("eventModal");
 }
 
-
-// =====================================================
-// CALENDAR
-// =====================================================
-
 function dateToISO(date) {
     const year = date.getFullYear();
 
@@ -609,7 +597,6 @@ function getCalendarItems(date) {
 
     const items = [];
 
-    // EVENTS
     events
         .filter(event => event.date === dateString)
         .forEach(event => {
@@ -623,7 +610,6 @@ function getCalendarItems(date) {
             });
         });
 
-    // TASKS
     tasks
         .filter(task => task.dueDate === dateString)
         .forEach(task => {
@@ -637,7 +623,6 @@ function getCalendarItems(date) {
             });
         });
 
-    // WEDNESDAY CLUB
     if (date.getDay() === 3) {
         items.push({
             id: `club-wednesday-${dateString}`,
@@ -647,7 +632,6 @@ function getCalendarItems(date) {
         });
     }
 
-    // FRIDAY CLUB
     if (date.getDay() === 5) {
         items.push({
             id: `club-friday-${dateString}`,
@@ -695,7 +679,6 @@ function renderCalendar() {
             0
         ).getDate();
 
-    // EMPTY DAYS BEFORE MONTH STARTS
     for (
         let i = 0;
         i < firstDay;
@@ -710,7 +693,6 @@ function renderCalendar() {
         calendarGrid.appendChild(blank);
     }
 
-    // MONTH DAYS
     for (
         let day = 1;
         day <= daysInMonth;
@@ -752,7 +734,6 @@ function renderCalendar() {
             itemBox.textContent =
                 item.name;
 
-            // EVENT
             if (item.source === "event") {
                 itemBox.title =
                     "Click to edit or delete";
@@ -765,7 +746,6 @@ function renderCalendar() {
                 );
             }
 
-            // TASK
             if (item.source === "task") {
                 itemBox.title = "Task";
 
@@ -797,7 +777,6 @@ function renderCalendar() {
                 );
             }
 
-            // CLUB
             if (item.source === "club") {
                 itemBox.title =
                     "Club session";
@@ -809,11 +788,6 @@ function renderCalendar() {
         calendarGrid.appendChild(dayBox);
     }
 }
-
-
-// =====================================================
-// EVENT ACTION MENU
-// =====================================================
 
 function showEventActions(eventId) {
     const event = events.find(
@@ -843,11 +817,6 @@ function showEventActions(eventId) {
     }
 }
 
-
-// =====================================================
-// CALENDAR NAVIGATION
-// =====================================================
-
 document
     .getElementById("previousMonth")
     .addEventListener("click", () => {
@@ -871,9 +840,7 @@ document
     });
 
 
-// =====================================================
-// TASK FILTERS
-// =====================================================
+/* TASK FILTERS */
 
 document.querySelectorAll(".filter-button")
     .forEach(button => {
@@ -901,11 +868,6 @@ document.querySelectorAll(".filter-button")
             }
         );
     });
-
-
-// =====================================================
-// RENDER TASKS
-// =====================================================
 
 function renderTasks() {
     const taskList =
@@ -1090,9 +1052,7 @@ function renderTasks() {
 }
 
 
-// =====================================================
-// DASHBOARD
-// =====================================================
+/* DASHBOARD */
 
 function renderDashboard() {
     const dashboardTasks =
@@ -1108,7 +1068,6 @@ function renderDashboard() {
     dashboardTasks.innerHTML = "";
     dashboardEvents.innerHTML = "";
 
-    // ACTIVE TASKS
     const activeTasks =
         tasks
             .filter(
@@ -1162,7 +1121,6 @@ function renderDashboard() {
         });
     }
 
-    // UPCOMING EVENTS
     const today = new Date();
 
     const todayStart =
@@ -1254,9 +1212,7 @@ function renderDashboard() {
 }
 
 
-// =====================================================
-// PROJECT PROGRESS
-// =====================================================
+/* PROJECT PROGRESS */
 
 function renderProjectProgress() {
     const container =
@@ -1368,9 +1324,7 @@ function chooseProjectProgress(category) {
 }
 
 
-// =====================================================
-// TEAM MEMBERS
-// =====================================================
+/* TEAM */
 
 document
     .getElementById("addMemberButton")
@@ -1492,11 +1446,6 @@ function deleteMember(index) {
     renderEverything();
 }
 
-
-// =====================================================
-// CLUB ATTENDANCE
-// =====================================================
-
 function renderAttendance() {
     const wednesday =
         document.getElementById(
@@ -1513,7 +1462,6 @@ function renderAttendance() {
 
     members.forEach(member => {
 
-        // WEDNESDAY
         const wedLabel =
             document.createElement(
                 "label"
@@ -1553,7 +1501,6 @@ function renderAttendance() {
             wedLabel
         );
 
-        // FRIDAY
         const friLabel =
             document.createElement(
                 "label"
@@ -1622,9 +1569,7 @@ function updateAttendance(
 }
 
 
-// =====================================================
-// PHOTOS
-// =====================================================
+/* PHOTOS */
 
 document
     .getElementById("addPhotoButton")
@@ -1764,9 +1709,7 @@ function deletePhoto(photoId) {
 }
 
 
-// =====================================================
-// STATS
-// =====================================================
+/* STATS */
 
 function updateStats() {
     document.getElementById(
@@ -1842,9 +1785,7 @@ function updateStats() {
 }
 
 
-// =====================================================
-// SECURITY / HTML HELPER
-// =====================================================
+/* HELPERS */
 
 function escapeHTML(value) {
     if (value === undefined || value === null) {
@@ -1859,11 +1800,6 @@ function escapeHTML(value) {
         .replaceAll("'", "&#039;");
 }
 
-
-// =====================================================
-// RENDER EVERYTHING
-// =====================================================
-
 function renderEverything() {
     renderCalendar();
     renderTasks();
@@ -1872,11 +1808,6 @@ function renderEverything() {
     renderTeam();
     renderPhotos();
 }
-
-
-// =====================================================
-// INITIAL RENDER
-// =====================================================
 
 if (
     sessionStorage.getItem(
