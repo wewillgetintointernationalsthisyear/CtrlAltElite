@@ -10,16 +10,25 @@ const PHOTOS_KEY = "ctrlaltelite_photos";
 let tasks = JSON.parse(localStorage.getItem(TASKS_KEY)) || [];
 let events = JSON.parse(localStorage.getItem(EVENTS_KEY)) || [];
 let members = JSON.parse(localStorage.getItem(MEMBERS_KEY)) || [];
-let attendance = JSON.parse(localStorage.getItem(ATTENDANCE_KEY)) || {
-    wednesday: [],
-    friday: []
-};
 let projectProgress =
     JSON.parse(localStorage.getItem(PROGRESS_KEY)) || {};
 let photos = JSON.parse(localStorage.getItem(PHOTOS_KEY)) || [];
 
+/* ATTENDANCE */
 
-// Convert old member objects into normal names
+let attendance =
+    JSON.parse(localStorage.getItem(ATTENDANCE_KEY)) || {};
+
+if (!Array.isArray(attendance.wednesday)) {
+    attendance.wednesday = [];
+}
+
+if (!Array.isArray(attendance.friday)) {
+    attendance.friday = [];
+}
+
+/* Convert old member objects into names */
+
 members = members.map(member => {
     if (typeof member === "string") {
         return member;
@@ -37,12 +46,12 @@ members = members.map(member => {
     return String(member);
 });
 
-saveMembers();
+/* Convert old attendance objects into names */
 
-
-// Make sure attendance uses normal names too
 attendance.wednesday = attendance.wednesday.map(member => {
-    if (typeof member === "string") return member;
+    if (typeof member === "string") {
+        return member;
+    }
 
     if (member && typeof member === "object") {
         return (
@@ -57,7 +66,9 @@ attendance.wednesday = attendance.wednesday.map(member => {
 });
 
 attendance.friday = attendance.friday.map(member => {
-    if (typeof member === "string") return member;
+    if (typeof member === "string") {
+        return member;
+    }
 
     if (member && typeof member === "object") {
         return (
@@ -71,8 +82,8 @@ attendance.friday = attendance.friday.map(member => {
     return String(member);
 });
 
+saveMembers();
 saveAttendance();
-
 
 let currentDate = new Date();
 let currentFilter = "all";
@@ -95,6 +106,8 @@ const progressLevels = [
     { value: 90, label: "Basically done" },
     { value: 100, label: "Competition ready" }
 ];
+
+/* LOGIN */
 
 const loginScreen = document.getElementById("loginScreen");
 const site = document.getElementById("site");
@@ -134,6 +147,8 @@ if (
     loginScreen.classList.add("hidden");
     site.classList.remove("hidden");
 }
+
+/* SAVE FUNCTIONS */
 
 function saveTasks() {
     localStorage.setItem(
@@ -177,6 +192,8 @@ function savePhotos() {
     );
 }
 
+/* NAVIGATION */
+
 document.querySelectorAll(".nav-button").forEach(button => {
     button.addEventListener("click", () => {
         const sectionName = button.dataset.section;
@@ -191,24 +208,32 @@ document.querySelectorAll(".nav-button").forEach(button => {
             section.classList.remove("active");
         });
 
-        document
-            .getElementById(sectionName)
-            .classList.add("active");
+        const section = document.getElementById(sectionName);
+
+        if (section) {
+            section.classList.add("active");
+        }
 
         renderEverything();
     });
 });
 
+/* MODALS */
+
 function openModal(id) {
-    document
-        .getElementById(id)
-        .classList.remove("hidden");
+    const modal = document.getElementById(id);
+
+    if (modal) {
+        modal.classList.remove("hidden");
+    }
 }
 
 function closeModal(id) {
-    document
-        .getElementById(id)
-        .classList.add("hidden");
+    const modal = document.getElementById(id);
+
+    if (modal) {
+        modal.classList.add("hidden");
+    }
 }
 
 document.querySelectorAll(".close-modal").forEach(button => {
@@ -224,7 +249,6 @@ document.querySelectorAll(".modal").forEach(modal => {
         }
     });
 });
-
 
 /* TASKS */
 
@@ -243,9 +267,7 @@ document
     });
 
 function prepareTaskModal() {
-    document
-        .getElementById("taskForm")
-        .reset();
+    document.getElementById("taskForm").reset();
 
     const assigneeBox =
         document.getElementById("taskAssignees");
@@ -253,11 +275,8 @@ function prepareTaskModal() {
     assigneeBox.innerHTML = "";
 
     if (members.length === 0) {
-        assigneeBox.innerHTML = `
-            <p class="muted">
-                Add team members first.
-            </p>
-        `;
+        assigneeBox.innerHTML =
+            '<p class="muted">Add team members first.</p>';
         return;
     }
 
@@ -280,20 +299,18 @@ document
     .addEventListener("submit", event => {
         event.preventDefault();
 
-        const name =
-            document
-                .getElementById("taskName")
-                .value
-                .trim();
+        const name = document
+            .getElementById("taskName")
+            .value
+            .trim();
 
         const category =
             document.getElementById("taskCategory").value;
 
-        const notes =
-            document
-                .getElementById("taskNotes")
-                .value
-                .trim();
+        const notes = document
+            .getElementById("taskNotes")
+            .value
+            .trim();
 
         const dueDate =
             document.getElementById("taskDueDate").value;
@@ -303,6 +320,10 @@ document
                 "#taskAssignees input:checked"
             )
         ].map(input => input.value);
+
+        if (!name) {
+            return;
+        }
 
         tasks.push({
             id: Date.now(),
@@ -316,9 +337,7 @@ document
         });
 
         saveTasks();
-
         closeModal("taskModal");
-
         renderEverything();
     });
 
@@ -342,12 +361,13 @@ function changeTaskProgress(taskId) {
         task => task.id === taskId
     );
 
-    if (!task) return;
+    if (!task) {
+        return;
+    }
 
-    const currentIndex =
-        progressLevels.findIndex(
-            level => level.value === task.progress
-        );
+    const currentIndex = progressLevels.findIndex(
+        level => level.value === task.progress
+    );
 
     const nextIndex =
         currentIndex >= progressLevels.length - 1
@@ -358,7 +378,6 @@ function changeTaskProgress(taskId) {
         progressLevels[nextIndex].value;
 
     saveTasks();
-
     renderEverything();
 }
 
@@ -367,11 +386,19 @@ function addSubtask(taskId) {
         task => task.id === taskId
     );
 
-    if (!task) return;
+    if (!task) {
+        return;
+    }
+
+    if (!Array.isArray(task.subtasks)) {
+        task.subtasks = [];
+    }
 
     const name = prompt("Subtask name:");
 
-    if (!name || !name.trim()) return;
+    if (!name || !name.trim()) {
+        return;
+    }
 
     task.subtasks.push({
         id: Date.now(),
@@ -380,7 +407,6 @@ function addSubtask(taskId) {
     });
 
     saveTasks();
-
     renderEverything();
 }
 
@@ -389,18 +415,21 @@ function toggleSubtask(taskId, subtaskId) {
         task => task.id === taskId
     );
 
-    if (!task) return;
+    if (!task) {
+        return;
+    }
 
     const subtask = task.subtasks.find(
         subtask => subtask.id === subtaskId
     );
 
-    if (!subtask) return;
+    if (!subtask) {
+        return;
+    }
 
     subtask.completed = !subtask.completed;
 
     saveTasks();
-
     renderEverything();
 }
 
@@ -409,7 +438,9 @@ function deleteTask(taskId) {
         task => task.id === taskId
     );
 
-    if (!task) return;
+    if (!task) {
+        return;
+    }
 
     if (
         !confirm(
@@ -424,10 +455,8 @@ function deleteTask(taskId) {
     );
 
     saveTasks();
-
     renderEverything();
 }
-
 
 /* EVENTS */
 
@@ -464,11 +493,10 @@ document
 
         const form = event.target;
 
-        const name =
-            document
-                .getElementById("eventName")
-                .value
-                .trim();
+        const name = document
+            .getElementById("eventName")
+            .value
+            .trim();
 
         const type =
             document.getElementById("eventType").value;
@@ -476,17 +504,15 @@ document
         const date =
             document.getElementById("eventDate").value;
 
-        const location =
-            document
-                .getElementById("eventLocation")
-                .value
-                .trim();
+        const location = document
+            .getElementById("eventLocation")
+            .value
+            .trim();
 
-        const notes =
-            document
-                .getElementById("eventNotes")
-                .value
-                .trim();
+        const notes = document
+            .getElementById("eventNotes")
+            .value
+            .trim();
 
         const editingId =
             form.dataset.editingId;
@@ -518,9 +544,7 @@ document
         }
 
         saveEvents();
-
         closeModal("eventModal");
-
         renderEverything();
     });
 
@@ -529,7 +553,9 @@ function deleteEvent(eventId) {
         event => event.id === eventId
     );
 
-    if (!event) return;
+    if (!event) {
+        return;
+    }
 
     if (
         !confirm(
@@ -544,7 +570,6 @@ function deleteEvent(eventId) {
     );
 
     saveEvents();
-
     renderEverything();
 }
 
@@ -553,7 +578,9 @@ function editEvent(eventId) {
         event => event.id === eventId
     );
 
-    if (!event) return;
+    if (!event) {
+        return;
+    }
 
     const form =
         document.getElementById("eventForm");
@@ -651,6 +678,10 @@ function renderCalendar() {
     const calendarMonth =
         document.getElementById("calendarMonth");
 
+    if (!calendarGrid || !calendarMonth) {
+        return;
+    }
+
     calendarGrid.innerHTML = "";
 
     const year = currentDate.getFullYear();
@@ -666,11 +697,7 @@ function renderCalendar() {
         );
 
     const firstDay =
-        new Date(
-            year,
-            month,
-            1
-        ).getDay();
+        new Date(year, month, 1).getDay();
 
     const daysInMonth =
         new Date(
@@ -752,13 +779,14 @@ function renderCalendar() {
                 itemBox.addEventListener(
                     "click",
                     () => {
-                        const task =
-                            tasks.find(
-                                task =>
-                                    task.id === item.id
-                            );
+                        const task = tasks.find(
+                            task =>
+                                task.id === item.id
+                        );
 
-                        if (!task) return;
+                        if (!task) {
+                            return;
+                        }
 
                         alert(
                             `${task.name}\n\n` +
@@ -794,7 +822,9 @@ function showEventActions(eventId) {
         event => event.id === eventId
     );
 
-    if (!event) return;
+    if (!event) {
+        return;
+    }
 
     const choice = prompt(
         `"${event.name}"\n\n` +
@@ -803,7 +833,9 @@ function showEventActions(eventId) {
         `Type "cancel" to do nothing.`
     );
 
-    if (!choice) return;
+    if (!choice) {
+        return;
+    }
 
     const action =
         choice.trim().toLowerCase();
@@ -839,10 +871,10 @@ document
         renderDashboard();
     });
 
-
 /* TASK FILTERS */
 
-document.querySelectorAll(".filter-button")
+document
+    .querySelectorAll(".filter-button")
     .forEach(button => {
         button.addEventListener(
             "click",
@@ -851,18 +883,14 @@ document.querySelectorAll(".filter-button")
                     button.dataset.filter;
 
                 document
-                    .querySelectorAll(
-                        ".filter-button"
-                    )
+                    .querySelectorAll(".filter-button")
                     .forEach(btn => {
                         btn.classList.remove(
                             "active"
                         );
                     });
 
-                button.classList.add(
-                    "active"
-                );
+                button.classList.add("active");
 
                 renderTasks();
             }
@@ -872,6 +900,10 @@ document.querySelectorAll(".filter-button")
 function renderTasks() {
     const taskList =
         document.getElementById("taskList");
+
+    if (!taskList) {
+        return;
+    }
 
     taskList.innerHTML = "";
 
@@ -897,18 +929,22 @@ function renderTasks() {
     }
 
     filteredTasks.forEach(task => {
+        if (!Array.isArray(task.subtasks)) {
+            task.subtasks = [];
+        }
+
+        if (!Array.isArray(task.assignees)) {
+            task.assignees = [];
+        }
+
         const card =
             document.createElement("div");
 
-        card.className =
-            "task-card";
+        card.className = "task-card";
 
         let assigneeHTML = "";
 
-        if (
-            task.assignees &&
-            task.assignees.length > 0
-        ) {
+        if (task.assignees.length > 0) {
             assigneeHTML = `
                 <div class="task-assignees">
                     ${task.assignees
@@ -925,10 +961,7 @@ function renderTasks() {
 
         let subtasksHTML = "";
 
-        if (
-            task.subtasks &&
-            task.subtasks.length > 0
-        ) {
+        if (task.subtasks.length > 0) {
             subtasksHTML = `
                 <div class="subtasks">
                     ${task.subtasks
@@ -947,7 +980,6 @@ function renderTasks() {
                                             ${subtask.id}
                                         )"
                                     >
-
                                     <span class="${
                                         subtask.completed
                                             ? "completed"
@@ -1049,8 +1081,9 @@ function renderTasks() {
 
         taskList.appendChild(card);
     });
-}
 
+    saveTasks();
+}
 
 /* DASHBOARD */
 
@@ -1065,15 +1098,16 @@ function renderDashboard() {
             "dashboardEvents"
         );
 
+    if (!dashboardTasks || !dashboardEvents) {
+        return;
+    }
+
     dashboardTasks.innerHTML = "";
     dashboardEvents.innerHTML = "";
 
     const activeTasks =
         tasks
-            .filter(
-                task =>
-                    task.progress < 100
-            )
+            .filter(task => task.progress < 100)
             .slice(0, 6);
 
     if (activeTasks.length === 0) {
@@ -1171,18 +1205,18 @@ function renderDashboard() {
 
                     <small>
                         ${event.date}
+
                         ${
                             event.location
                                 ? ` • ${escapeHTML(
-                                    event.location
-                                )}`
+                                      event.location
+                                  )}`
                                 : ""
                         }
                     </small>
                 </div>
 
                 <div class="event-actions">
-
                     <button
                         class="small-button"
                         onclick="editEvent(
@@ -1200,7 +1234,6 @@ function renderDashboard() {
                     >
                         Delete
                     </button>
-
                 </div>
             `;
 
@@ -1211,7 +1244,6 @@ function renderDashboard() {
     updateStats();
 }
 
-
 /* PROJECT PROGRESS */
 
 function renderProjectProgress() {
@@ -1220,64 +1252,51 @@ function renderProjectProgress() {
             "projectProgress"
         );
 
+    if (!container) {
+        return;
+    }
+
     container.innerHTML = "";
 
-    Object.keys(categoryNames)
-        .forEach(category => {
-            const value =
-                projectProgress[
+    Object.keys(categoryNames).forEach(category => {
+        const value =
+            projectProgress[category] !== undefined
+                ? projectProgress[category]
+                : 0;
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "project-progress-item";
+
+        button.innerHTML = `
+            <span>
+                ${categoryNames[category]}
+            </span>
+
+            <strong>
+                ${getProgressLabel(value)}
+            </strong>
+        `;
+
+        button.addEventListener(
+            "click",
+            () => {
+                chooseProjectProgress(
                     category
-                ] !== undefined
-                    ? projectProgress[
-                        category
-                    ]
-                    : 0;
-
-            const button =
-                document.createElement(
-                    "button"
                 );
+            }
+        );
 
-            button.className =
-                "project-progress-item";
-
-            button.innerHTML = `
-                <span>
-                    ${
-                        categoryNames[
-                            category
-                        ]
-                    }
-                </span>
-
-                <strong>
-                    ${getProgressLabel(
-                        value
-                    )}
-                </strong>
-            `;
-
-            button.addEventListener(
-                "click",
-                () => {
-                    chooseProjectProgress(
-                        category
-                    );
-                }
-            );
-
-            container.appendChild(button);
-        });
+        container.appendChild(button);
+    });
 }
 
 function chooseProjectProgress(category) {
     const currentValue =
-        projectProgress[
-            category
-        ] !== undefined
-            ? projectProgress[
-                category
-            ]
+        projectProgress[category] !== undefined
+            ? projectProgress[category]
             : 0;
 
     const options =
@@ -1297,7 +1316,9 @@ function chooseProjectProgress(category) {
         `Enter a number from 1-${progressLevels.length}:`
     );
 
-    if (!answer) return;
+    if (!answer) {
+        return;
+    }
 
     const selectedIndex =
         Number(answer) - 1;
@@ -1305,48 +1326,34 @@ function chooseProjectProgress(category) {
     if (
         Number.isNaN(selectedIndex) ||
         selectedIndex < 0 ||
-        selectedIndex >=
-            progressLevels.length
+        selectedIndex >= progressLevels.length
     ) {
         return;
     }
 
-    projectProgress[
-        category
-    ] =
-        progressLevels[
-            selectedIndex
-        ].value;
+    projectProgress[category] =
+        progressLevels[selectedIndex].value;
 
     saveProgress();
-
     renderProjectProgress();
 }
-
 
 /* TEAM */
 
 document
     .getElementById("addMemberButton")
     .addEventListener("click", () => {
-        const name =
-            prompt(
-                "Team member name:"
-            );
+        const name = prompt(
+            "Team member name:"
+        );
 
-        if (
-            !name ||
-            !name.trim()
-        ) {
+        if (!name || !name.trim()) {
             return;
         }
 
-        members.push(
-            name.trim()
-        );
+        members.push(name.trim());
 
         saveMembers();
-
         renderEverything();
     });
 
@@ -1355,6 +1362,10 @@ function renderTeam() {
         document.getElementById(
             "teamMembers"
         );
+
+    if (!teamMembers) {
+        return;
+    }
 
     teamMembers.innerHTML = "";
 
@@ -1368,9 +1379,7 @@ function renderTeam() {
         members.forEach(
             (member, index) => {
                 const memberBox =
-                    document.createElement(
-                        "div"
-                    );
+                    document.createElement("div");
 
                 memberBox.className =
                     "team-member";
@@ -1401,10 +1410,11 @@ function renderTeam() {
 }
 
 function deleteMember(index) {
-    const member =
-        members[index];
+    const member = members[index];
 
-    if (!member) return;
+    if (!member) {
+        return;
+    }
 
     if (
         !confirm(
@@ -1414,28 +1424,26 @@ function deleteMember(index) {
         return;
     }
 
-    members.splice(
-        index,
-        1
-    );
+    members.splice(index, 1);
 
     attendance.wednesday =
         attendance.wednesday.filter(
-            name =>
-                name !== member
+            name => name !== member
         );
 
     attendance.friday =
         attendance.friday.filter(
-            name =>
-                name !== member
+            name => name !== member
         );
 
     tasks.forEach(task => {
+        if (!Array.isArray(task.assignees)) {
+            task.assignees = [];
+        }
+
         task.assignees =
             task.assignees.filter(
-                name =>
-                    name !== member
+                name => name !== member
             );
     });
 
@@ -1457,15 +1465,16 @@ function renderAttendance() {
             "fridayAttendance"
         );
 
+    if (!wednesday || !friday) {
+        return;
+    }
+
     wednesday.innerHTML = "";
     friday.innerHTML = "";
 
     members.forEach(member => {
-
         const wedLabel =
-            document.createElement(
-                "label"
-            );
+            document.createElement("label");
 
         wedLabel.className =
             "attendance-option";
@@ -1481,6 +1490,7 @@ function renderAttendance() {
                         : ""
                 }
             >
+
             ${escapeHTML(member)}
         `;
 
@@ -1502,9 +1512,7 @@ function renderAttendance() {
         );
 
         const friLabel =
-            document.createElement(
-                "label"
-            );
+            document.createElement("label");
 
         friLabel.className =
             "attendance-option";
@@ -1520,6 +1528,7 @@ function renderAttendance() {
                         : ""
                 }
             >
+
             ${escapeHTML(member)}
         `;
 
@@ -1547,27 +1556,25 @@ function updateAttendance(
     member,
     attending
 ) {
+    if (!Array.isArray(attendance[day])) {
+        attendance[day] = [];
+    }
+
     if (attending) {
         if (
-            !attendance[day].includes(
-                member
-            )
+            !attendance[day].includes(member)
         ) {
-            attendance[day].push(
-                member
-            );
+            attendance[day].push(member);
         }
     } else {
         attendance[day] =
             attendance[day].filter(
-                name =>
-                    name !== member
+                name => name !== member
             );
     }
 
     saveAttendance();
 }
-
 
 /* PHOTOS */
 
@@ -1575,9 +1582,7 @@ document
     .getElementById("addPhotoButton")
     .addEventListener("click", () => {
         document
-            .getElementById(
-                "photoForm"
-            )
+            .getElementById("photoForm")
             .reset();
 
         openModal("photoModal");
@@ -1600,7 +1605,9 @@ document
                     "photoNotes"
                 ).value.trim();
 
-            if (!file) return;
+            if (!file) {
+                return;
+            }
 
             const reader =
                 new FileReader();
@@ -1621,9 +1628,7 @@ document
                 renderPhotos();
             };
 
-            reader.readAsDataURL(
-                file
-            );
+            reader.readAsDataURL(file);
         }
     );
 
@@ -1632,6 +1637,10 @@ function renderPhotos() {
         document.getElementById(
             "photoGrid"
         );
+
+    if (!photoGrid) {
+        return;
+    }
 
     photoGrid.innerHTML = "";
 
@@ -1647,9 +1656,7 @@ function renderPhotos() {
 
     photos.forEach(photo => {
         const card =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
         card.className =
             "photo-card";
@@ -1682,9 +1689,7 @@ function renderPhotos() {
             </button>
         `;
 
-        photoGrid.appendChild(
-            card
-        );
+        photoGrid.appendChild(card);
     });
 }
 
@@ -1704,21 +1709,45 @@ function deletePhoto(photoId) {
         );
 
     savePhotos();
-
     renderPhotos();
 }
-
 
 /* STATS */
 
 function updateStats() {
-    document.getElementById(
-        "statTasks"
-    ).textContent =
+    const statTasks =
+        document.getElementById(
+            "statTasks"
+        );
+
+    const statEvents =
+        document.getElementById(
+            "statEvents"
+        );
+
+    const statOverdue =
+        document.getElementById(
+            "statOverdue"
+        );
+
+    const statProgress =
+        document.getElementById(
+            "statProgress"
+        );
+
+    if (
+        !statTasks ||
+        !statEvents ||
+        !statOverdue ||
+        !statProgress
+    ) {
+        return;
+    }
+
+    statTasks.textContent =
         tasks.length;
 
-    const today =
-        new Date();
+    const today = new Date();
 
     const todayStart =
         new Date(
@@ -1738,9 +1767,7 @@ function updateStats() {
             return date >= todayStart;
         }).length;
 
-    document.getElementById(
-        "statEvents"
-    ).textContent =
+    statEvents.textContent =
         upcomingCount;
 
     const todayISO =
@@ -1750,15 +1777,12 @@ function updateStats() {
         tasks.filter(task => {
             return (
                 task.dueDate &&
-                task.dueDate <
-                    todayISO &&
+                task.dueDate < todayISO &&
                 task.progress < 100
             );
         }).length;
 
-    document.getElementById(
-        "statOverdue"
-    ).textContent =
+    statOverdue.textContent =
         overdue;
 
     let progress = 0;
@@ -1766,29 +1790,23 @@ function updateStats() {
     if (tasks.length > 0) {
         progress =
             tasks.reduce(
-                (
-                    total,
-                    task
-                ) =>
-                    total +
-                    task.progress,
+                (total, task) =>
+                    total + task.progress,
                 0
             ) / tasks.length;
     }
 
-    document.getElementById(
-        "statProgress"
-    ).textContent =
-        `${Math.round(
-            progress
-        )}%`;
+    statProgress.textContent =
+        `${Math.round(progress)}%`;
 }
-
 
 /* HELPERS */
 
 function escapeHTML(value) {
-    if (value === undefined || value === null) {
+    if (
+        value === undefined ||
+        value === null
+    ) {
         return "";
     }
 
@@ -1799,6 +1817,8 @@ function escapeHTML(value) {
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
 }
+
+/* RENDER EVERYTHING */
 
 function renderEverything() {
     renderCalendar();
